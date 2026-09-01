@@ -32,6 +32,10 @@ export type BrandDetail = {
   colour: string;
   image: string;
   fact: string;
+  menuPdf: {
+    name: string;
+    url: string;
+  };
 };
 
 export type Offer = {
@@ -49,16 +53,72 @@ export type EventItem = {
   description: string;
   outlet: string;
   cta: string;
+  image?: string;
+};
+
+export type ProfileSlot = {
+  id: string;
+  role: string;
+  name: string;
+  bio: string;
+  image: string;
+};
+
+export type JournalEntry = {
+  id: string;
+  label: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  image: string;
+};
+
+export type AwardEntry = {
+  id: string;
+  year: string;
+  title: string;
+  organisation: string;
+  note: string;
+};
+
+export type AboutContent = {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  story: string;
+  food: string;
+  inspiration: string;
+  profiles: ProfileSlot[];
+};
+
+export type SiteContent = {
+  logo: {
+    name: string;
+    url: string;
+  };
+  app: {
+    eyebrow: string;
+    title: string;
+    copy: string;
+    appStoreUrl: string;
+    googlePlayUrl: string;
+  };
 };
 
 export type ContentState = {
+  version: number;
   brands: Record<BrandKey, BrandDetail>;
   outlets: Outlet[];
   offers: Offer[];
   events: EventItem[];
+  about: AboutContent;
+  journal: JournalEntry[];
+  awards: AwardEntry[];
+  site: SiteContent;
 };
 
 export const initialContent: ContentState = {
+  version: 2,
   brands: {
     'The Social': {
       eyebrow: 'Good food. Good people. Good times.',
@@ -67,6 +127,7 @@ export const initialContent: ContentState = {
       colour: '#e15d3b',
       image: '/images/hero-table.jpg',
       fact: '240+ labels behind the bar',
+      menuPdf: { name: '', url: '' },
     },
     'Lisette’s Café & Bakery': {
       eyebrow: 'Baked slowly. Lived fully.',
@@ -75,6 +136,7 @@ export const initialContent: ContentState = {
       colour: '#839a7a',
       image: '/images/lisettes-bakery.jpg',
       fact: 'Bread, pastries & all-day brunch',
+      menuPdf: { name: '', url: '' },
     },
     'Cafe Deli by El Mesón': {
       eyebrow: 'A little Spain, all day long.',
@@ -83,6 +145,7 @@ export const initialContent: ContentState = {
       colour: '#31566b',
       image: '/images/cafe-deli.jpg',
       fact: 'Spanish plates & proper coffee',
+      menuPdf: { name: '', url: '' },
     },
   },
   outlets: [
@@ -193,14 +256,67 @@ export const initialContent: ContentState = {
   ],
   events: [
     {
-      id: 'long-table',
-      date: 'Made for groups',
-      title: 'The long-table season.',
-      description: 'Birthday dinners, team nights, the annual dinner that actually gets people excited.',
+      id: 'coffee-club-lisettes',
+      date: 'Editable event label',
+      title: 'Coffee Club at Lisette’s',
+      description: 'A relaxed coffee gathering moment for good conversation, fresh bakes and a slower start.',
+      outlet: 'Lisette’s Café & Bakery',
+      cta: 'Keep me posted',
+      image: '/images/lisettes-bakery.jpg',
+    },
+    {
+      id: 'jazz-nights-social',
+      date: 'Editable event label',
+      title: 'Jazz Nights at The Social',
+      description: 'An evening of live jazz energy, shared plates and another reason to stay awhile.',
+      outlet: 'The Social',
+      cta: 'Keep me posted',
+      image: '/images/hero-table.jpg',
+    },
+    {
+      id: 'group-gathering-moment',
+      date: 'Editable event label',
+      title: 'A group gathering moment',
+      description: 'A good excuse to bring the wider Social Group community around one generous table.',
       outlet: 'Across the group',
-      cta: 'Plan yours',
+      cta: 'Keep me posted',
+      image: '/images/cafe-deli.jpg',
     },
   ],
+  about: {
+    eyebrow: 'A quarter century of gathering',
+    title: '25 years in KL. Still making room.',
+    intro: 'The Social Group of Restaurants has been part of Kuala Lumpur since 2001 — making places for good food, easy conversation and the everyday occasions that become the stories we keep.',
+    story: 'Our story is still being written. Add the moments, people and turning points that matter most to the group here.',
+    food: 'Food should give people a reason to linger. Tell guests about the flavours, kitchens and shared-table rituals that shape your restaurants.',
+    inspiration: 'Inspired by the neighbourhoods around us, the people who fill our tables and the belief that hospitality can feel both generous and familiar.',
+    profiles: [
+      { id: 'founders', role: 'Founders', name: 'Add profile', bio: 'Add the founders’ story, names and point of view here.', image: '' },
+      { id: 'team', role: 'The team', name: 'Add profile', bio: 'Add a team profile or the people behind the day-to-day here.', image: '' },
+      { id: 'kitchen', role: 'Food & kitchens', name: 'Add profile', bio: 'Add a chef, kitchen or food story here when ready.', image: '' },
+    ],
+  },
+  journal: [
+    {
+      id: 'journal-starter',
+      label: 'Editable journal starter',
+      title: 'A note from the table',
+      excerpt: 'Add a story about the people, places and small decisions that make the group what it is.',
+      body: 'This is an editable starter entry. Replace it with a success story, kitchen note, community moment or behind-the-scenes journal.',
+      image: '/images/hero-table.jpg',
+    },
+  ],
+  awards: [],
+  site: {
+    logo: { name: '', url: '' },
+    app: {
+      eyebrow: 'Social Rewards',
+      title: 'Good things, in your pocket.',
+      copy: 'Use the Social Rewards app for membership, table bookings, delivery and take away. Add your live app links in Content Studio when they are ready.',
+      appStoreUrl: '',
+      googlePlayUrl: '',
+    },
+  },
 };
 
 const storageKey = 'social-group-content-v1';
@@ -211,12 +327,37 @@ function isContentState(value: unknown): value is ContentState {
   return Boolean(candidate.brands && candidate.outlets && candidate.offers && candidate.events);
 }
 
+function mergeContent(stored: Partial<ContentState>): ContentState {
+  const storedBrands = stored.brands ?? {};
+  const brands = Object.fromEntries(
+    Object.entries({ ...initialContent.brands, ...storedBrands }).map(([name, detail]) => [
+      name,
+      { ...initialContent.brands[name], ...detail, menuPdf: { ...initialContent.brands[name]?.menuPdf, ...(detail as BrandDetail).menuPdf } },
+    ]),
+  ) as Record<BrandKey, BrandDetail>;
+  const storedEvents = Array.isArray(stored.events) ? stored.events : [];
+  const events = stored.version === 2 ? storedEvents : [...initialContent.events, ...storedEvents.filter((event) => !initialContent.events.some((seed) => seed.id === event.id))];
+  return {
+    ...initialContent,
+    ...stored,
+    version: 2,
+    brands,
+    outlets: Array.isArray(stored.outlets) ? stored.outlets : initialContent.outlets,
+    offers: Array.isArray(stored.offers) ? stored.offers : initialContent.offers,
+    events,
+    about: { ...initialContent.about, ...(stored.about ?? {}), profiles: Array.isArray(stored.about?.profiles) ? stored.about.profiles : initialContent.about.profiles },
+    journal: Array.isArray(stored.journal) ? stored.journal : initialContent.journal,
+    awards: Array.isArray(stored.awards) ? stored.awards : initialContent.awards,
+    site: { ...initialContent.site, ...(stored.site ?? {}), logo: { ...initialContent.site.logo, ...(stored.site?.logo ?? {}) }, app: { ...initialContent.site.app, ...(stored.site?.app ?? {}) } },
+  };
+}
+
 export function loadContent(): ContentState {
   if (typeof window === 'undefined') return initialContent;
   try {
     const stored = window.localStorage.getItem(storageKey);
     const parsed: unknown = stored ? JSON.parse(stored) : null;
-    return isContentState(parsed) ? parsed : initialContent;
+    return parsed && typeof parsed === 'object' ? mergeContent(parsed as Partial<ContentState>) : initialContent;
   } catch {
     return initialContent;
   }
