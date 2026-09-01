@@ -1,62 +1,230 @@
-import { type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { ArrowRight, ArrowUpRight, CalendarDays, Check, ChevronDown, Instagram, Mail, MapPin, Menu, Minus, Plus, Search, Sparkles, Users, X } from 'lucide-react';
+import { Link, Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
 import NotFound from '@/pages/not-found';
-import {
-  Route,
-  Switch,
-  useLocation,
-  Router as WouterRouter,
-} from 'wouter';
 
-const queryClient = new QueryClient();
+type BrandKey = 'The Social' | 'Lisette’s Café & Bakery' | 'Cafe Deli by El Mesón';
+type Occasion = 'Brunch' | 'Dinner' | 'Drinks' | 'Family time' | 'A big celebration';
+type Outlet = {
+  id: string;
+  name: string;
+  brand: BrandKey;
+  area: string;
+  type: string;
+  description: string;
+  tags: string[];
+  occasions: Occasion[];
+  capacity: string;
+  hours: string;
+  accent: string;
+  image: string;
+  menu: { name: string; description: string; price: string }[];
+};
+
+const outlets: Outlet[] = [
+  { id: 'bangsar', name: 'Bangsar', brand: 'The Social', area: 'Bangsar, Kuala Lumpur', type: 'Neighbourhood bar & kitchen', description: 'Your regular table, turned up a notch. Come for a long lunch, stay through happy hour and let the playlist take it from there.', tags: ['Sourdough pizza', '240+ beers', 'Late nights'], occasions: ['Dinner', 'Drinks', 'A big celebration'], capacity: 'Up to 100 guests', hours: '11:30am – 1:00am', accent: '#e15d3b', image: '/images/hero-table.jpg', menu: [{ name: 'The Social Sourdough', description: 'Tomato, fior di latte, basil, chilli oil', price: 'RM 32' }, { name: 'Crispy Chicken Burger', description: 'Pickles, slaw, house sauce, fries', price: 'RM 34' }, { name: 'Passionfruit Spritz', description: 'Aperitif, passionfruit, bubbles, lime', price: 'RM 28' }] },
+  { id: 'publika', name: 'Publika', brand: 'The Social', area: 'Solaris Dutamas, Kuala Lumpur', type: 'Social dining room', description: 'A bright, easy-going room for after-work pints, office lunches and dinners that do not need an occasion.', tags: ['Office lunch', 'Happy hour', 'Big tables'], occasions: ['Dinner', 'Drinks', 'Family time'], capacity: 'Up to 120 guests', hours: '11:30am – 12:00am', accent: '#d7a62c', image: '/images/hero-table.jpg', menu: [{ name: 'Buttermilk Fried Chicken', description: 'Hot honey, ranch, celery, herbs', price: 'RM 29' }, { name: 'Mushroom Truffle Pizza', description: 'Roasted mushroom, mozzarella, truffle cream', price: 'RM 38' }, { name: 'Social Lager', description: 'Cold, crisp, uncomplicated', price: 'RM 16' }] },
+  { id: 'empire', name: 'Empire Subang', brand: 'The Social', area: 'Empire Shopping Gallery, Subang Jaya', type: 'Family-friendly kitchen', description: 'A little more space for a lot more togetherness. Easy lunches, birthday dinners and a table for everyone.', tags: ['Family friendly', 'Weekend lunch', 'Dessert'], occasions: ['Brunch', 'Family time', 'A big celebration'], capacity: 'Up to 140 guests', hours: '11:30am – 12:00am', accent: '#43715b', image: '/images/hero-table.jpg', menu: [{ name: 'Big Breakfast', description: 'Eggs, sourdough, sausage, beans, roasted tomato', price: 'RM 35' }, { name: 'Mac & Cheese', description: 'Three cheese sauce, pangrattato, herbs', price: 'RM 25' }, { name: 'Peanut Butter Stack', description: 'Banana, chocolate, toasted peanuts', price: 'RM 19' }] },
+  { id: 'desapark', name: 'Desa ParkCity', brand: 'Lisette’s Café & Bakery', area: 'The Waterfront, Desa ParkCity', type: 'Bakery café', description: 'Slow mornings, good bread and the kind of coffee break that makes the rest of the day behave.', tags: ['Fresh bakes', 'All-day brunch', 'Dog friendly'], occasions: ['Brunch', 'Family time'], capacity: 'Up to 65 guests', hours: '8:00am – 10:00pm', accent: '#839a7a', image: '/images/lisettes-bakery.jpg', menu: [{ name: 'Lisette’s Sourdough Toast', description: 'Avocado, poached egg, dukkah, lemon', price: 'RM 24' }, { name: 'Seasonal Danish', description: 'Market fruit, almond frangipane, glaze', price: 'RM 14' }, { name: 'Iced Oat Latte', description: 'House espresso, oat milk, vanilla', price: 'RM 15' }] },
+  { id: '163', name: '163 Retail Park', brand: 'Cafe Deli by El Mesón', area: 'Mont Kiara, Kuala Lumpur', type: 'Spanish-influenced café deli', description: 'A warm all-day stop for a cortado, a plate of something savoury and one more conversation before heading home.', tags: ['All-day', 'Spanish plates', 'Takeaway'], occasions: ['Brunch', 'Dinner', 'Family time'], capacity: 'Up to 55 guests', hours: '9:00am – 10:00pm', accent: '#31566b', image: '/images/cafe-deli.jpg', menu: [{ name: 'Pan Con Tomate', description: 'Grilled sourdough, ripe tomato, olive oil, sea salt', price: 'RM 16' }, { name: 'Tortilla Española', description: 'Potato, onion, eggs, alioli', price: 'RM 22' }, { name: 'El Mesón Cortado', description: 'Double espresso, silky steamed milk', price: 'RM 11' }] },
+];
+
+const brandDetails: Record<BrandKey, { eyebrow: string; title: string; text: string; colour: string; image: string; fact: string }> = {
+  'The Social': { eyebrow: 'Good food. Good people. Good times.', title: 'The table is always bigger than you think.', text: 'The Social is an urban neighbourhood kitchen and bar for the everyday celebrations: office lunches, cold beers, sourdough pizza, family dinners and nights that accidentally become late ones.', colour: '#e15d3b', image: '/images/hero-table.jpg', fact: '240+ labels behind the bar' },
+  'Lisette’s Café & Bakery': { eyebrow: 'Baked slowly. Lived fully.', title: 'A softer start to the day.', text: 'Lisette’s is about good bread, seasonal plates and taking the long way through your morning. A wholesome neighbourhood bakery café with a little French ease and a lot of local warmth.', colour: '#839a7a', image: '/images/lisettes-bakery.jpg', fact: 'Bread, pastries & all-day brunch' },
+  'Cafe Deli by El Mesón': { eyebrow: 'A little Spain, all day long.', title: 'Pull up a chair, stay for another.', text: 'Cafe Deli brings the warmth of an old-school Spanish deli to the neighbourhood: generous plates, great coffee, and food that makes a quick stop feel like a proper pause.', colour: '#31566b', image: '/images/cafe-deli.jpg', fact: 'Spanish plates & proper coffee' },
+};
+
+const navItems = [
+  { href: '/find-your-place', label: 'Find your place' },
+  { href: '/brands', label: 'Our brands' },
+  { href: '/locations', label: 'Locations' },
+  { href: '/private-events', label: 'Private events' },
+  { href: '/rewards', label: 'Rewards' },
+];
+
+function ScrollReset() {
+  const [location] = useLocation();
+  useEffect(() => window.scrollTo({ top: 0, behavior: 'instant' }), [location]);
+  return null;
+}
+
+function Header() {
+  const [location] = useLocation();
+  const [open, setOpen] = useState(false);
+  return (
+    <header className="sticky top-0 z-40 border-b border-[hsl(var(--border)/.7)] bg-[hsl(var(--background)/.92)] backdrop-blur-md">
+      <div className="mx-auto flex h-[76px] max-w-[1440px] items-center justify-between px-5 md:px-10">
+        <Link href="/" className="group flex items-center gap-3" data-testid="link-home">
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-[hsl(var(--secondary))] text-[hsl(var(--accent))] transition-transform group-hover:rotate-12"><span className="display text-2xl">S</span></span>
+          <span className="leading-[.9]"><span className="block text-[11px] font-bold uppercase tracking-[.22em]">The Social</span><span className="block text-[11px] uppercase tracking-[.22em] text-[hsl(var(--muted-foreground))]">Group of Restaurants</span></span>
+        </Link>
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
+          {navItems.map((item) => <Link key={item.href} href={item.href} className={`text-[13px] font-semibold transition-colors hover:text-[hsl(var(--primary))] ${location === item.href ? 'text-[hsl(var(--primary))]' : 'text-[hsl(var(--foreground)/.78)]'}`} data-testid={`link-nav-${item.label.toLowerCase().replaceAll(' ', '-')}`}>{item.label}</Link>)}
+          <Link href="/contact" className="ml-2 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-5 py-3 text-[13px] font-bold text-[hsl(var(--primary-foreground))] transition-transform hover:-translate-y-0.5" data-testid="link-contact">Say hello <ArrowUpRight size={15} /></Link>
+        </nav>
+        <button className="grid h-11 w-11 place-items-center rounded-full border border-[hsl(var(--border))] lg:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu" data-testid="button-toggle-menu">{open ? <X size={20} /> : <Menu size={20} />}</button>
+      </div>
+      {open && <nav className="border-t border-[hsl(var(--border))] bg-[hsl(var(--background))] px-5 py-4 lg:hidden" aria-label="Mobile navigation">
+        {navItems.map((item) => <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="flex items-center justify-between border-b border-[hsl(var(--border)/.7)] py-4 text-base font-semibold" data-testid={`link-mobile-${item.label.toLowerCase().replaceAll(' ', '-')}`}>{item.label}<ArrowUpRight size={17} /></Link>)}
+        <Link href="/contact" onClick={() => setOpen(false)} className="mt-4 flex items-center justify-between rounded-full bg-[hsl(var(--primary))] px-5 py-3 font-bold text-[hsl(var(--primary-foreground))]" data-testid="link-mobile-contact">Say hello <ArrowUpRight size={17} /></Link>
+      </nav>}
+    </header>
+  );
+}
+
+function Footer() {
+  return <footer className="bg-[hsl(var(--secondary))] px-5 py-12 text-[hsl(var(--secondary-foreground))] md:px-10 md:py-16">
+    <div className="mx-auto max-w-[1440px]">
+      <div className="grid gap-12 md:grid-cols-[1.3fr_.7fr_.7fr]">
+        <div><p className="display max-w-sm text-4xl leading-[.98] md:text-5xl">Make a little more room for good times.</p><Link href="/find-your-place" className="mt-8 inline-flex items-center gap-2 border-b border-[hsl(var(--accent))] pb-2 text-sm font-semibold text-[hsl(var(--accent))]" data-testid="link-footer-find">Find your place <ArrowRight size={15} /></Link></div>
+        <div><p className="mono mb-5 text-[10px] uppercase tracking-[.18em] text-[hsl(var(--secondary-foreground)/.55)]">Explore</p>{navItems.slice(0, 4).map((item) => <Link key={item.href} href={item.href} className="mb-3 block text-sm text-[hsl(var(--secondary-foreground)/.84)] hover:text-[hsl(var(--accent))]" data-testid={`link-footer-${item.label.toLowerCase().replaceAll(' ', '-')}`}>{item.label}</Link>)}</div>
+        <div><p className="mono mb-5 text-[10px] uppercase tracking-[.18em] text-[hsl(var(--secondary-foreground)/.55)]">Keep in touch</p><p className="max-w-[210px] text-sm leading-relaxed text-[hsl(var(--secondary-foreground)/.8)]">New tables, fresh bakes, good reasons to get together.</p><div className="mt-5 flex gap-3"><a href="mailto:hello@thesocial.com.my" className="grid h-9 w-9 place-items-center rounded-full border border-[hsl(var(--secondary-foreground)/.25)] hover:border-[hsl(var(--accent))]" data-testid="link-footer-email"><Mail size={15} /></a><a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="grid h-9 w-9 place-items-center rounded-full border border-[hsl(var(--secondary-foreground)/.25)] hover:border-[hsl(var(--accent))]" data-testid="link-footer-instagram"><Instagram size={15} /></a></div></div>
+      </div>
+      <div className="mt-14 flex flex-col gap-3 border-t border-[hsl(var(--secondary-foreground)/.16)] pt-5 text-[10px] uppercase tracking-[.15em] text-[hsl(var(--secondary-foreground)/.48)] md:flex-row md:justify-between"><span>© 2025 The Social Group of Restaurants</span><span>Kuala Lumpur, Malaysia</span></div>
+    </div>
+  </footer>;
+}
+
+function ButtonLink({ href, children, light = false, testId }: { href: string; children: ReactNode; light?: boolean; testId: string }) {
+  return <Link href={href} className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-bold transition-all hover:-translate-y-0.5 ${light ? 'bg-[hsl(var(--card))] text-[hsl(var(--foreground))]' : 'bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]'}`} data-testid={testId}>{children}<ArrowUpRight size={16} /></Link>;
+}
+
+function Eyebrow({ children, light = false }: { children: ReactNode; light?: boolean }) {
+  return <p className={`mono text-[10px] font-medium uppercase tracking-[.18em] ${light ? 'text-[hsl(var(--accent))]' : 'text-[hsl(var(--primary))]'}`}>{children}</p>;
+}
 
 function Home() {
-  return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Replit Agent is building...
-        </h1>
-        <p className="mt-2 text-sm text-gray-600">
-          Your app will appear here once it's ready.
-        </p>
+  return <PageShell>
+    <section className="relative overflow-hidden bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))]">
+      <div className="mx-auto grid min-h-[680px] max-w-[1440px] items-center gap-12 px-5 py-16 md:grid-cols-[1fr_.9fr] md:px-10 md:py-24">
+        <div className="relative z-10 animate-rise">
+          <Eyebrow light>Good places, for every kind of good time</Eyebrow>
+          <h1 className="display mt-7 max-w-[650px] text-[clamp(4.3rem,9vw,8.5rem)] leading-[.82] tracking-[-.04em]">Come as you are. <em className="text-[hsl(var(--accent))]">Stay awhile.</em></h1>
+          <p className="mt-8 max-w-[445px] text-base leading-relaxed text-[hsl(var(--secondary-foreground)/.72)] md:text-lg">Three distinct spots, one very simple idea: there is always a table that feels like yours.</p>
+          <div className="mt-9 flex flex-wrap gap-3"><ButtonLink href="/find-your-place" light testId="link-hero-find">Find your place</ButtonLink><ButtonLink href="/locations" light testId="link-hero-locations">See all locations</ButtonLink></div>
+        </div>
+        <div className="relative animate-rise delay-2">
+          <div className="absolute -left-5 -top-8 z-10 rounded-full bg-[hsl(var(--accent))] px-4 py-2 text-xs font-bold text-[hsl(var(--foreground))] shadow-[var(--shadow-md)] md:-left-10"><Sparkles size={13} className="mr-1 inline" /> Your table is waiting</div>
+          <div className="relative aspect-[.9] overflow-hidden rounded-[46%_46%_8px_8px] bg-[hsl(var(--primary))]">
+            <img src="/images/hero-table.jpg" alt="A shared table with pizza, drinks and small plates" className="h-full w-full object-cover mix-blend-multiply opacity-90" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--secondary)/.7)] via-transparent to-[hsl(var(--accent)/.12)]" />
+            <span className="absolute bottom-7 left-7 max-w-[170px] display text-4xl leading-[.92]">Make room for one more.</span>
+          </div>
+          <div className="absolute -bottom-6 -right-3 grid h-28 w-28 rotate-6 place-items-center rounded-full border border-[hsl(var(--accent)/.6)] bg-[hsl(var(--primary))] text-center text-[11px] font-bold uppercase leading-tight tracking-[.1em] text-[hsl(var(--primary-foreground))] md:-right-9"><span>KL<br />since<br />2008</span></div>
+        </div>
       </div>
-    </div>
-  );
+      <div className="absolute -bottom-8 -left-8 display text-[17rem] leading-none text-[hsl(var(--secondary-foreground)/.03)]">S</div>
+    </section>
+    <section className="border-b border-[hsl(var(--border))] bg-[hsl(var(--accent))] py-4 overflow-hidden">
+      <div className="animate-marquee flex w-max items-center gap-8 whitespace-nowrap mono text-[11px] font-medium uppercase tracking-[.2em]"><span>good food</span><span>·</span><span>cold beer</span><span>·</span><span>fresh bakes</span><span>·</span><span>big tables</span><span>·</span><span>good food</span><span>·</span><span>cold beer</span><span>·</span><span>fresh bakes</span><span>·</span><span>big tables</span></div>
+    </section>
+    <section className="section-pad mx-auto max-w-[1440px] px-5 md:px-10" id="discover">
+      <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><Eyebrow>Start here</Eyebrow><h2 className="display mt-4 max-w-[570px] text-5xl leading-[.93] md:text-7xl">Where are you <em>headed?</em></h2></div><p className="max-w-[280px] text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">Tell us a little about your day. We’ll point you towards a table that makes sense.</p></div>
+      <div className="mt-12 grid gap-4 md:grid-cols-3">
+        {[{ title: 'A slow morning', copy: 'Coffee, something warm, nowhere else to be.', href: '/find-your-place?mood=Brunch', colour: '#d9e1cf', image: '/images/lisettes-bakery.jpg' }, { title: 'Dinner with the gang', copy: 'Big flavours, bigger table, no awkward silences.', href: '/find-your-place?mood=Dinner', colour: '#e6b35e', image: '/images/hero-table.jpg' }, { title: 'One more round', copy: 'Cold beer, good music, and see where it goes.', href: '/find-your-place?mood=Drinks', colour: '#b8cbd0', image: '/images/cafe-deli.jpg' }].map((item, index) => <Link href={item.href} key={item.title} className="group relative min-h-[340px] overflow-hidden rounded-2xl p-7" style={{ backgroundColor: item.colour }} data-testid={`card-moment-${index}`}><img src={item.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-75 mix-blend-multiply transition duration-500 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--foreground)/.68)] to-transparent" /><div className="relative flex h-full flex-col justify-end text-[hsl(var(--card))]"><span className="mb-auto grid h-10 w-10 place-items-center rounded-full bg-[hsl(var(--card)/.85)] text-[hsl(var(--foreground))]"><ArrowUpRight size={18} /></span><p className="display text-4xl leading-none">{item.title}</p><p className="mt-2 max-w-[240px] text-sm text-[hsl(var(--card)/.78)]">{item.copy}</p></div></Link>)}
+      </div>
+    </section>
+    <section className="bg-[hsl(var(--primary))] px-5 py-16 text-[hsl(var(--primary-foreground))] md:px-10 md:py-24">
+      <div className="mx-auto grid max-w-[1440px] items-end gap-10 md:grid-cols-[1fr_.8fr]"><div><Eyebrow light>Three ways to feel at home</Eyebrow><h2 className="display mt-4 max-w-[700px] text-5xl leading-[.9] md:text-8xl">Different moods.<br /><em>Same warm welcome.</em></h2></div><p className="max-w-[350px] text-sm leading-relaxed text-[hsl(var(--primary-foreground)/.75)]">Find the energy that fits. Our places are related, never replicated.</p></div>
+      <div className="mx-auto mt-14 grid max-w-[1440px] border-t border-[hsl(var(--primary-foreground)/.3)] md:grid-cols-3">{(Object.keys(brandDetails) as BrandKey[]).map((brand, index) => <Link href={`/brands#${index === 0 ? 'the-social' : index === 1 ? 'lisettes' : 'cafe-deli'}`} key={brand} className="group border-b border-[hsl(var(--primary-foreground)/.3)] py-7 md:border-b-0 md:border-r md:px-7 md:first:pl-0 md:last:border-r-0" data-testid={`link-home-brand-${index}`}><div className="flex items-start justify-between"><span className="mono text-[10px] opacity-60">0{index + 1}</span><ArrowUpRight size={19} className="transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" /></div><h3 className="display mt-16 text-4xl leading-none">{brand}</h3><p className="mt-4 max-w-[250px] text-sm text-[hsl(var(--primary-foreground)/.72)]">{brandDetails[brand].fact}</p></Link>)}</div>
+    </section>
+    <section className="section-pad mx-auto max-w-[1440px] px-5 md:px-10"><div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><Eyebrow>On the calendar</Eyebrow><h2 className="display mt-4 text-5xl leading-[.9] md:text-7xl">A good reason<br /><em>to drop by.</em></h2></div><Link href="/rewards" className="inline-flex items-center gap-2 text-sm font-bold text-[hsl(var(--primary))]" data-testid="link-home-whats-on">See what’s on <ArrowRight size={15} /></Link></div><div className="mt-12 grid gap-5 md:grid-cols-[1.2fr_.8fr]"><Link href="/rewards" className="group relative min-h-[330px] overflow-hidden rounded-3xl bg-[hsl(var(--accent))] p-7 md:p-10" data-testid="card-home-offer"><div className="absolute right-[-15%] top-[-30%] h-[370px] w-[370px] rounded-full border-[28px] border-[hsl(var(--primary)/.18)]" /><div className="relative flex h-full max-w-[430px] flex-col justify-between"><span className="mono text-[10px] uppercase tracking-[.18em]">Social Club · member moment</span><div><h3 className="display text-5xl leading-[.88]">Your next<br /><em>first pour.</em></h3><p className="mt-4 max-w-[310px] text-sm leading-relaxed">Join the club and we’ll make your first visit feel like you’ve been coming for years.</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-bold">Join Social Club <ArrowUpRight size={15} /></span></div></div></Link><Link href="/private-events" className="group relative overflow-hidden rounded-3xl bg-[hsl(var(--secondary))] p-7 text-[hsl(var(--secondary-foreground))] md:p-10" data-testid="card-home-event"><div className="flex h-full min-h-[270px] flex-col justify-between"><span className="mono text-[10px] uppercase tracking-[.18em] text-[hsl(var(--accent))]">Coming up · made for groups</span><div><h3 className="display text-4xl leading-[.9]">The long-table<br /><em>season.</em></h3><p className="mt-4 max-w-[260px] text-sm leading-relaxed text-[hsl(var(--secondary-foreground)/.7)]">Birthday dinners, team nights, the annual dinner that actually gets people excited.</p><span className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[hsl(var(--accent))]">Plan yours <ArrowUpRight size={15} /></span></div></div></Link></div></section>
+    <section className="section-pad mx-auto max-w-[1440px] px-5 md:px-10"><div className="grid items-center gap-12 md:grid-cols-[.8fr_1fr]"><div className="order-2 md:order-1"><Eyebrow>For the big stuff</Eyebrow><h2 className="display mt-4 text-5xl leading-[.9] md:text-7xl">Bring the<br /><em>whole story.</em></h2><p className="mt-6 max-w-[400px] text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">Birthdays, launches, team nights, the annual dinner that actually gets people excited. Our tables are made for a little occasion.</p><ButtonLink href="/private-events" testId="link-home-events">Plan a private event</ButtonLink></div><div className="relative order-1 grid grid-cols-2 gap-3 md:order-2"><div className="mt-12 aspect-[.75] rounded-t-full bg-[hsl(var(--accent))]" /><div className="aspect-[.75] overflow-hidden rounded-b-full bg-[hsl(var(--secondary))]"><img src="/images/hero-table.jpg" alt="Friends sharing food at a restaurant table" className="h-full w-full object-cover mix-blend-screen opacity-70" /></div><div className="absolute left-1/2 top-1/2 grid h-24 w-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[hsl(var(--primary))] text-center text-xs font-bold uppercase leading-tight text-[hsl(var(--primary-foreground))]">Made for<br />gathering</div></div></div></section>
+    <section className="border-y border-[hsl(var(--border))] bg-[hsl(var(--muted)/.42)] px-5 py-14 md:px-10"><div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-6 md:flex-row md:items-center"><div><Eyebrow>Join the good company</Eyebrow><h2 className="display mt-3 text-4xl md:text-5xl">A little something for your next visit.</h2></div><ButtonLink href="/rewards" testId="link-home-rewards">Discover Social Club</ButtonLink></div></section>
+  </PageShell>;
+}
+
+function PageShell({ children }: { children: ReactNode }) { return <div className="paper-grain min-h-[100dvh] bg-[hsl(var(--background))]"><Header /><ScrollReset /><main>{children}</main><Footer /></div>; }
+
+function PageIntro({ eyebrow, title, copy, colour = 'primary' }: { eyebrow: string; title: ReactNode; copy: string; colour?: 'primary' | 'secondary' }) {
+  return <section className={`${colour === 'secondary' ? 'bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))]' : 'bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]'} px-5 py-16 md:px-10 md:py-24`}><div className="mx-auto max-w-[1440px]"><Eyebrow light>{eyebrow}</Eyebrow><h1 className="display mt-6 max-w-[850px] text-6xl leading-[.84] tracking-[-.03em] md:text-8xl">{title}</h1><p className="mt-8 max-w-[530px] text-base leading-relaxed opacity-75">{copy}</p></div></section>;
+}
+
+function FindYourPlace() {
+  const [occasion, setOccasion] = useState<Occasion | ''>('');
+  const [area, setArea] = useState('Anywhere');
+  const [party, setParty] = useState(2);
+  const [submitted, setSubmitted] = useState(false);
+  const filtered = useMemo(() => outlets.filter((outlet) => (area === 'Anywhere' || outlet.area.includes(area)) && (!occasion || outlet.occasions.includes(occasion))), [area, occasion]);
+  const results = filtered.length ? filtered : outlets.filter((outlet) => !occasion || outlet.occasions.includes(occasion));
+  const complete = Boolean(occasion);
+  return <PageShell>
+    <PageIntro eyebrow="A little local intuition" title={<>Find your<br /><em>place.</em></>} copy="A few quick questions, then a short list of places that fit the moment. No endless scrolling. No wrong answers." />
+    <section className="mx-auto max-w-[1120px] px-5 py-14 md:px-10 md:py-20">
+      <div className="rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-[var(--shadow-sm)] md:p-10">
+        <div className="flex flex-col justify-between gap-3 border-b border-[hsl(var(--border))] pb-7 sm:flex-row sm:items-end"><div><Eyebrow>Your night, in four questions</Eyebrow><h2 className="display mt-3 text-4xl">What are we getting into?</h2></div><span className="mono text-[10px] uppercase tracking-[.16em] text-[hsl(var(--muted-foreground))]">Step 01 / 04</span></div>
+        <div className="mt-9"><label className="text-sm font-semibold">What’s the occasion?</label><div className="mt-4 grid gap-2 sm:grid-cols-2 md:grid-cols-5">{(['Brunch', 'Dinner', 'Drinks', 'Family time', 'A big celebration'] as Occasion[]).map((item) => <button key={item} onClick={() => { setOccasion(item); setSubmitted(false); }} className={`min-h-14 rounded-xl border px-3 text-left text-sm transition-all ${occasion === item ? 'border-[hsl(var(--primary))] bg-[hsl(var(--primary)/.1)] font-bold text-[hsl(var(--primary))]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--primary)/.6)]'}`} data-testid={`button-occasion-${item.toLowerCase().replaceAll(' ', '-')}`}>{occasion === item && <Check size={14} className="mr-1 inline" />}{item}</button>)}</div></div>
+        <div className="mt-9 grid gap-8 md:grid-cols-2"><div><label htmlFor="find-area" className="text-sm font-semibold">Where should we look?</label><div className="relative mt-3"><MapPin size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[hsl(var(--primary))]" /><select id="find-area" value={area} onChange={(event) => setArea(event.target.value)} className="h-12 w-full appearance-none rounded-xl border border-[hsl(var(--border))] bg-transparent pl-11 pr-10 text-sm outline-none focus:border-[hsl(var(--primary))]" data-testid="select-find-area"><option>Anywhere</option><option>Bangsar</option><option>Publika</option><option>Subang</option><option>Desa ParkCity</option><option>Mont Kiara</option></select><ChevronDown size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" /></div></div><div><label className="text-sm font-semibold">How many are joining?</label><div className="mt-3 flex h-12 items-center justify-between rounded-xl border border-[hsl(var(--border))] px-4"><span className="text-sm text-[hsl(var(--muted-foreground))]"><Users size={16} className="mr-2 inline" />Guests</span><span className="flex items-center gap-3"><button onClick={() => setParty(Math.max(1, party - 1))} className="grid h-7 w-7 place-items-center rounded-full bg-[hsl(var(--muted))]" aria-label="Decrease party size" data-testid="button-decrease-party"><Minus size={13} /></button><strong className="w-4 text-center">{party}</strong><button onClick={() => setParty(Math.min(20, party + 1))} className="grid h-7 w-7 place-items-center rounded-full bg-[hsl(var(--muted))]" aria-label="Increase party size" data-testid="button-increase-party"><Plus size={13} /></button></span></div></div></div>
+        <button onClick={() => setSubmitted(true)} disabled={!complete} className="mt-9 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--secondary))] px-6 py-3.5 text-sm font-bold text-[hsl(var(--secondary-foreground))] transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40" data-testid="button-find-results"><Search size={16} /> Show me the good stuff</button>
+      </div>
+      {submitted && <div className="animate-rise mt-14"><div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><Eyebrow>Our instinct says</Eyebrow><h2 className="display mt-3 text-5xl">This feels like you.</h2><p className="mt-3 text-sm text-[hsl(var(--muted-foreground))]">{results.length} {results.length === 1 ? 'place' : 'places'} for {party} {party === 1 ? 'guest' : 'guests'} · {occasion}</p></div><button onClick={() => { setSubmitted(false); setOccasion(''); }} className="text-sm font-bold text-[hsl(var(--primary))] underline underline-offset-4" data-testid="button-start-over">Start over</button></div><div className="mt-8 grid gap-5">{results.map((outlet, index) => <MatchCard key={outlet.id} outlet={outlet} rank={index} occasion={occasion} party={party} />)}</div></div>}
+    </section>
+    <section className="bg-[hsl(var(--muted)/.45)] px-5 py-16 md:px-10"><div className="mx-auto grid max-w-[1120px] gap-8 md:grid-cols-[.8fr_1.2fr]"><div><Eyebrow>How it works</Eyebrow><h2 className="display mt-3 text-5xl leading-[.9]">Good instincts,<br /><em>made useful.</em></h2></div><div className="grid gap-5 sm:grid-cols-3">{[['01', 'Name the mood', 'Brunch, dinner, a drink or a big reason to gather.'], ['02', 'Add the details', 'Your neighbourhood and your favourite number of people.'], ['03', 'Meet your match', 'A considered shortlist, with the why right there.']].map(([number, title, copy]) => <div key={number} className="border-t border-[hsl(var(--border))] pt-4"><span className="mono text-xs text-[hsl(var(--primary))]">{number}</span><h3 className="mt-7 font-bold">{title}</h3><p className="mt-2 text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">{copy}</p></div>)}</div></div></section>
+  </PageShell>;
+}
+
+function MatchCard({ outlet, rank, occasion, party }: { outlet: Outlet; rank: number; occasion: Occasion | ''; party: number }) {
+  const reason = outlet.occasions.includes(occasion as Occasion) ? `A natural fit for ${occasion.toLowerCase()}, with ${outlet.capacity.toLowerCase()} and ${outlet.tags[0].toLowerCase()} on the menu.` : `A flexible choice with ${outlet.capacity.toLowerCase()} — worth the short trip for its ${outlet.tags[0].toLowerCase()}.`;
+  return <article className="grid overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] md:grid-cols-[190px_1fr_auto]"><img src={outlet.image} alt={`${outlet.brand} ${outlet.name}`} className="h-48 w-full object-cover md:h-full" /><div className="p-6"><div className="flex flex-wrap items-center gap-2"><span className="mono text-[10px] uppercase tracking-[.15em] text-[hsl(var(--primary))]">0{rank + 1} · {outlet.brand}</span></div><h3 className="display mt-3 text-4xl leading-none">{outlet.name}</h3><p className="mt-2 text-xs text-[hsl(var(--muted-foreground))]"><MapPin size={12} className="mr-1 inline" />{outlet.area}</p><div className="mt-5 border-l-2 border-[hsl(var(--accent))] pl-3"><p className="text-xs font-bold uppercase tracking-[.12em]">Why this match</p><p className="mt-1 text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">{reason} Just right for {party}.</p></div></div><div className="flex flex-row items-center justify-between gap-4 border-t border-[hsl(var(--border))] p-6 md:flex-col md:items-end md:border-l md:border-t-0"><span className="rounded-full bg-[hsl(var(--muted))] px-3 py-1.5 text-[11px] font-semibold">{outlet.type}</span><Link href={`/locations#${outlet.id}`} className="inline-flex items-center gap-2 text-sm font-bold text-[hsl(var(--primary))]" data-testid={`link-match-${outlet.id}`}>View place <ArrowRight size={15} /></Link></div></article>;
+}
+
+function Brands() {
+  return <PageShell><PageIntro eyebrow="Meet the family" title={<>Three places.<br /><em>One good feeling.</em></>} copy="Different rooms for different moods — connected by generous food, a warm welcome, and the belief that the best plans usually start with “shall we?”" /><section className="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-24">{(Object.keys(brandDetails) as BrandKey[]).map((brand, index) => <BrandRow key={brand} brand={brand} index={index} />)}</section><section className="bg-[hsl(var(--secondary))] px-5 py-16 text-[hsl(var(--secondary-foreground))] md:px-10 md:py-24"><div className="mx-auto max-w-[1440px] text-center"><Eyebrow light>Keep exploring</Eyebrow><h2 className="display mx-auto mt-4 max-w-[650px] text-5xl leading-[.9] md:text-7xl">The right table is closer than you think.</h2><div className="mt-9"><ButtonLink href="/locations" light testId="link-brands-locations">Explore locations</ButtonLink></div></div></section></PageShell>;
+}
+
+function BrandRow({ brand, index }: { brand: BrandKey; index: number }) {
+  const detail = brandDetails[brand];
+  return <article id={index === 0 ? 'the-social' : index === 1 ? 'lisettes' : 'cafe-deli'} className={`grid scroll-mt-28 items-center gap-10 border-b border-[hsl(var(--border))] py-14 first:pt-0 last:border-0 md:grid-cols-2 md:gap-20 md:py-24 ${index % 2 ? '' : ''}`}><div className={`relative ${index % 2 ? 'md:order-2' : ''}`}><div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full" style={{ backgroundColor: detail.colour }} /><img src={detail.image} alt={brand} className="relative aspect-[1.15] w-full rounded-3xl object-cover" /></div><div className={index % 2 ? 'md:order-1' : ''}><Eyebrow>{detail.eyebrow}</Eyebrow><h2 className="display mt-5 text-5xl leading-[.88] md:text-7xl">{detail.title}</h2><p className="mt-6 max-w-[410px] text-base leading-relaxed text-[hsl(var(--muted-foreground))]">{detail.text}</p><div className="mt-7 flex items-center gap-3 text-sm font-bold"><span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: detail.colour }} />{detail.fact}</div><Link href={`/locations?brand=${encodeURIComponent(brand)}`} className="mt-8 inline-flex items-center gap-2 border-b border-[hsl(var(--primary))] pb-2 text-sm font-bold text-[hsl(var(--primary))]" data-testid={`link-brand-locations-${index}`}>Find this feeling <ArrowUpRight size={15} /></Link></div></article>;
+}
+
+function Locations() {
+  const [selected, setSelected] = useState<Outlet>(outlets[0]);
+  const [brandFilter, setBrandFilter] = useState<'All' | BrandKey>('All');
+  const list = brandFilter === 'All' ? outlets : outlets.filter((outlet) => outlet.brand === brandFilter);
+  return <PageShell><PageIntro eyebrow="Come find us" title={<>Your next<br /><em>favourite table.</em></>} copy="Five neighbourhoods, three distinct ways to spend an afternoon or evening. Pick a place and we’ll show you what’s on the table." colour="secondary" /><section className="mx-auto max-w-[1440px] px-5 py-14 md:px-10 md:py-20"><div className="flex flex-wrap gap-2 border-b border-[hsl(var(--border))] pb-5">{(['All', 'The Social', 'Lisette’s Café & Bakery', 'Cafe Deli by El Mesón'] as const).map((filter) => <button key={filter} onClick={() => setBrandFilter(filter)} className={`rounded-full px-4 py-2 text-xs font-bold transition-colors ${brandFilter === filter ? 'bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]' : 'border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))]'}`} data-testid={`button-filter-${filter.replaceAll(' ', '-').toLowerCase()}`}>{filter}</button>)}</div><div className="mt-10 grid gap-10 lg:grid-cols-[.8fr_1.2fr]"><div className="space-y-2">{list.map((outlet) => <button key={outlet.id} onClick={() => setSelected(outlet)} className={`group flex w-full items-center justify-between border-b border-[hsl(var(--border))] py-5 text-left ${selected.id === outlet.id ? 'text-[hsl(var(--primary))]' : ''}`} data-testid={`button-location-${outlet.id}`}><span><span className="mono block text-[10px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">{outlet.brand}</span><span className="display mt-1 block text-4xl leading-none">{outlet.name}</span><span className="mt-2 block text-xs text-[hsl(var(--muted-foreground))]">{outlet.area}</span></span><ArrowUpRight size={20} className="transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" /></button>)}</div><LocationDetail outlet={selected} /></div></section></PageShell>;
+}
+
+function LocationDetail({ outlet }: { outlet: Outlet }) {
+  return <article id={outlet.id} className="scroll-mt-28"><div className="relative h-[260px] overflow-hidden rounded-3xl md:h-[355px]"><img src={outlet.image} alt={`${outlet.name} location`} className="h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--foreground)/.75)] to-transparent" /><div className="absolute bottom-6 left-6 text-[hsl(var(--card))] md:bottom-8 md:left-8"><p className="mono text-[10px] uppercase tracking-[.15em]">{outlet.brand}</p><h2 className="display mt-2 text-5xl">{outlet.name}</h2></div></div><div className="grid gap-8 border-b border-[hsl(var(--border))] py-8 md:grid-cols-[1fr_auto]"><div><p className="max-w-[570px] text-lg leading-relaxed">{outlet.description}</p><div className="mt-5 flex flex-wrap gap-2">{outlet.tags.map((tag) => <span key={tag} className="rounded-full bg-[hsl(var(--muted))] px-3 py-1.5 text-xs font-semibold">{tag}</span>)}</div></div><div className="grid grid-cols-2 gap-x-8 gap-y-4 text-xs md:min-w-[220px]"><div><span className="mono block text-[9px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">Hours</span><span className="mt-1 block font-semibold">{outlet.hours}</span></div><div><span className="mono block text-[9px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">Capacity</span><span className="mt-1 block font-semibold">{outlet.capacity}</span></div><div className="col-span-2"><span className="mono block text-[9px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">Address</span><span className="mt-1 block font-semibold">{outlet.area}</span></div></div></div><div className="pt-8"><div className="flex items-end justify-between"><div><Eyebrow>On the table</Eyebrow><h3 className="display mt-2 text-4xl">A little preview.</h3></div><Link href="/contact" className="hidden items-center gap-2 text-sm font-bold text-[hsl(var(--primary))] sm:flex" data-testid={`link-enquire-${outlet.id}`}>Ask us anything <ArrowUpRight size={15} /></Link></div><div className="mt-5 divide-y divide-[hsl(var(--border))] border-y border-[hsl(var(--border))]">{outlet.menu.map((item) => <div key={item.name} className="flex items-center justify-between gap-5 py-4"><div><p className="font-bold">{item.name}</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">{item.description}</p></div><span className="mono shrink-0 text-xs">{item.price}</span></div>)}</div></div></article>;
+}
+
+function PrivateEvents() {
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', date: '', guests: '10–20 guests', details: '' });
+  const update = (key: keyof typeof form, value: string) => setForm((current) => ({ ...current, [key]: value }));
+  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); setSent(true); };
+  return <PageShell><PageIntro eyebrow="For the big stuff" title={<>Make it<br /><em>personal.</em></>} copy="Tell us what you’re gathering for and we’ll help find the room, the menu and the little details to make it feel like yours." /><section className="mx-auto grid max-w-[1200px] gap-14 px-5 py-16 md:grid-cols-[.75fr_1.25fr] md:px-10 md:py-24"><div><Eyebrow>Gather well</Eyebrow><h2 className="display mt-4 text-5xl leading-[.9]">A table with<br />a story to tell.</h2><p className="mt-6 max-w-[330px] text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">From a birthday dinner in Bangsar to a team lunch at Publika, we’ll make the logistics feel easy and the event feel anything but ordinary.</p><div className="mt-10 space-y-5 border-t border-[hsl(var(--border))] pt-5 text-sm"><p><CalendarDays size={17} className="mr-3 inline text-[hsl(var(--primary))]" />Flexible dates & spaces</p><p><Users size={17} className="mr-3 inline text-[hsl(var(--primary))]" />Tables for 8 to 140 guests</p><p><Sparkles size={17} className="mr-3 inline text-[hsl(var(--primary))]" />Menus made for sharing</p></div></div>{sent ? <div className="flex min-h-[450px] flex-col justify-center rounded-3xl bg-[hsl(var(--secondary))] p-8 text-[hsl(var(--secondary-foreground))] md:p-12"><span className="grid h-12 w-12 place-items-center rounded-full bg-[hsl(var(--accent))] text-[hsl(var(--foreground))]"><Check size={22} /></span><h2 className="display mt-7 text-5xl leading-none">We’ve got it.</h2><p className="mt-5 max-w-[380px] text-sm leading-relaxed text-[hsl(var(--secondary-foreground)/.75)]">Thanks, {form.name || 'there'}. Our events team will be in touch at {form.email || 'your email'} with some good options.</p><button onClick={() => { setSent(false); setForm({ name: '', email: '', date: '', guests: '10–20 guests', details: '' }); }} className="mt-9 w-fit border-b border-[hsl(var(--accent))] pb-2 text-sm font-bold text-[hsl(var(--accent))]" data-testid="button-send-another">Send another enquiry</button></div> : <form onSubmit={submit} className="rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 md:p-10"><div className="grid gap-6 sm:grid-cols-2"><Field label="Your name" type="text" value={form.name} onChange={(value) => update('name', value)} required testId="input-event-name" /><Field label="Email address" type="email" value={form.email} onChange={(value) => update('email', value)} required testId="input-event-email" /><Field label="Ideal date" type="date" value={form.date} onChange={(value) => update('date', value)} required testId="input-event-date" /><label className="block"><span className="text-xs font-bold">Party size</span><select value={form.guests} onChange={(event) => update('guests', event.target.value)} className="mt-2 h-12 w-full rounded-xl border border-[hsl(var(--border))] bg-transparent px-4 text-sm outline-none focus:border-[hsl(var(--primary))]" data-testid="select-event-guests"><option>8–20 guests</option><option>21–50 guests</option><option>51–100 guests</option><option>100+ guests</option></select></label></div><label className="mt-6 block"><span className="text-xs font-bold">Tell us a little more</span><textarea value={form.details} onChange={(event) => update('details', event.target.value)} required rows={5} placeholder="Occasion, preferred area, menu thoughts..." className="mt-2 w-full resize-none rounded-xl border border-[hsl(var(--border))] bg-transparent p-4 text-sm outline-none placeholder:text-[hsl(var(--muted-foreground))] focus:border-[hsl(var(--primary))]" data-testid="textarea-event-details" /></label><button type="submit" className="mt-7 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-6 py-3.5 text-sm font-bold text-[hsl(var(--primary-foreground))] hover:-translate-y-0.5" data-testid="button-submit-event">Send enquiry <ArrowUpRight size={16} /></button><p className="mt-4 text-[11px] text-[hsl(var(--muted-foreground))]">No booking is made here — this just starts a good conversation.</p></form>}</section></PageShell>;
+}
+
+function Field({ label, type, value, onChange, required, testId }: { label: string; type: string; value: string; onChange: (value: string) => void; required?: boolean; testId: string }) {
+  return <label className="block"><span className="text-xs font-bold">{label}</span><input type={type} value={value} onChange={(event) => onChange(event.target.value)} required={required} className="mt-2 h-12 w-full rounded-xl border border-[hsl(var(--border))] bg-transparent px-4 text-sm outline-none focus:border-[hsl(var(--primary))]" data-testid={testId} /></label>;
+}
+
+function Rewards() {
+  const [joined, setJoined] = useState(false);
+  const [email, setEmail] = useState('');
+  return <PageShell><section className="bg-[hsl(var(--accent))] px-5 py-20 md:px-10 md:py-32"><div className="mx-auto grid max-w-[1440px] items-end gap-12 md:grid-cols-[1fr_.65fr]"><div><Eyebrow>Social Club</Eyebrow><h1 className="display mt-6 max-w-[820px] text-7xl leading-[.82] md:text-[9rem]">Good things<br /><em>come round.</em></h1></div><p className="max-w-[330px] text-base leading-relaxed">A little thank-you for making space for us in your week. Join Social Club for first pours, fresh bakes and reasons to come back.</p></div></section><section className="mx-auto grid max-w-[1200px] gap-14 px-5 py-16 md:grid-cols-[.9fr_1.1fr] md:px-10 md:py-24"><div><Eyebrow>It pays to be social</Eyebrow><h2 className="display mt-4 text-5xl leading-[.9]">The perks are<br /><em>worth staying for.</em></h2><p className="mt-6 text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">No points spreadsheets, no complicated tiers. Just good reasons to make your next visit a little more special.</p></div><div className="grid gap-3 sm:grid-cols-2">{[['01', 'A welcome treat', 'Something lovely on your first visit as a Social Club member.'], ['02', 'Early word', 'Hear about new menus, events and tables before everyone else.'], ['03', 'Member moments', 'Invites and little surprises across all three brands.'], ['04', 'Always local', 'Useful rewards made for the places you actually visit.']].map(([num, title, copy]) => <div key={num} className="rounded-2xl bg-[hsl(var(--muted)/.55)] p-6"><span className="mono text-[10px] text-[hsl(var(--primary))]">{num}</span><h3 className="mt-10 font-bold">{title}</h3><p className="mt-2 text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">{copy}</p></div>)}</div></section><section className="bg-[hsl(var(--secondary))] px-5 py-16 text-[hsl(var(--secondary-foreground))] md:px-10 md:py-20"><div className="mx-auto max-w-[650px] text-center">{joined ? <><Check className="mx-auto text-[hsl(var(--accent))]" size={30} /><h2 className="display mt-5 text-5xl">You’re in good company.</h2><p className="mt-4 text-sm opacity-75">Keep an eye on your inbox for a little welcome from us.</p></> : <><Eyebrow light>Pull up a chair</Eyebrow><h2 className="display mt-4 text-5xl">Join the club.</h2><form onSubmit={(event) => { event.preventDefault(); setJoined(true); }} className="mx-auto mt-8 flex max-w-[480px] flex-col gap-2 sm:flex-row"><input type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Your email address" className="h-12 flex-1 rounded-full border border-[hsl(var(--secondary-foreground)/.25)] bg-transparent px-5 text-sm outline-none placeholder:text-[hsl(var(--secondary-foreground)/.5)] focus:border-[hsl(var(--accent))]" data-testid="input-rewards-email" /><button className="h-12 rounded-full bg-[hsl(var(--accent))] px-6 text-sm font-bold text-[hsl(var(--foreground))]" data-testid="button-join-rewards">Join Social Club</button></form></>}</div></section></PageShell>;
+}
+
+function Contact() {
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', topic: '', message: '' });
+  const update = (key: keyof typeof form, value: string) => setForm((current) => ({ ...current, [key]: value }));
+  return <PageShell><PageIntro eyebrow="We’re around" title={<>Say<br /><em>hello.</em></>} copy="Questions about a place, a menu, a celebration, or just what’s good tonight? We’re listening." colour="secondary" /><section className="mx-auto grid max-w-[1200px] gap-14 px-5 py-16 md:grid-cols-[.7fr_1.3fr] md:px-10 md:py-24"><div><Eyebrow>Find us here</Eyebrow><div className="mt-8 space-y-7"><div><p className="mono text-[10px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">General enquiries</p><a href="mailto:hello@thesocial.com.my" className="mt-2 block text-lg font-semibold hover:text-[hsl(var(--primary))]" data-testid="link-contact-email">hello@thesocial.com.my</a></div><div><p className="mono text-[10px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">Private events</p><Link href="/private-events" className="mt-2 block text-lg font-semibold text-[hsl(var(--primary))]" data-testid="link-contact-events">Tell us about your event <ArrowUpRight size={16} className="inline" /></Link></div><div><p className="mono text-[10px] uppercase tracking-[.15em] text-[hsl(var(--muted-foreground))]">Social hours</p><p className="mt-2 text-lg font-semibold">Mon – Sun, 9am – 10pm</p></div></div></div>{sent ? <div className="rounded-3xl bg-[hsl(var(--accent))] p-8 md:p-12"><Check size={26} /><h2 className="display mt-7 text-5xl">Message received.</h2><p className="mt-4 max-w-[350px] text-sm leading-relaxed">Thanks for getting in touch. We’ll get back to you shortly.</p><button onClick={() => setSent(false)} className="mt-8 border-b border-[hsl(var(--foreground))] pb-2 text-sm font-bold" data-testid="button-contact-another">Send another message</button></div> : <form onSubmit={(event) => { event.preventDefault(); setSent(true); }} className="grid gap-6 rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 md:grid-cols-2 md:p-10"><Field label="Your name" type="text" value={form.name} onChange={(value) => update('name', value)} required testId="input-contact-name" /><Field label="Email address" type="email" value={form.email} onChange={(value) => update('email', value)} required testId="input-contact-email" /><label className="block md:col-span-2"><span className="text-xs font-bold">What can we help with?</span><select required value={form.topic} onChange={(event) => update('topic', event.target.value)} className="mt-2 h-12 w-full rounded-xl border border-[hsl(var(--border))] bg-transparent px-4 text-sm outline-none focus:border-[hsl(var(--primary))]" data-testid="select-contact-topic"><option value="">Select a topic</option><option>Finding a place</option><option>Menu question</option><option>Private events</option><option>Feedback</option></select></label><label className="block md:col-span-2"><span className="text-xs font-bold">Your message</span><textarea required value={form.message} onChange={(event) => update('message', event.target.value)} rows={5} className="mt-2 w-full resize-none rounded-xl border border-[hsl(var(--border))] bg-transparent p-4 text-sm outline-none focus:border-[hsl(var(--primary))]" data-testid="textarea-contact-message" /></label><button className="inline-flex w-fit items-center gap-2 rounded-full bg-[hsl(var(--primary))] px-6 py-3.5 text-sm font-bold text-[hsl(var(--primary-foreground))]" data-testid="button-submit-contact">Send message <ArrowUpRight size={16} /></button></form>}</section></PageShell>;
 }
 
 function Router() {
-  return (
-    // Keep a shared shell (sidebar, navbar) outside the boundary so it
-    // survives a page crash.
-    <RoutedErrorBoundary>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route component={NotFound} />
-      </Switch>
-    </RoutedErrorBoundary>
-  );
+  return <Switch><Route path="/" component={Home} /><Route path="/find-your-place" component={FindYourPlace} /><Route path="/brands" component={Brands} /><Route path="/locations" component={Locations} /><Route path="/private-events" component={PrivateEvents} /><Route path="/rewards" component={Rewards} /><Route path="/contact" component={Contact} /><Route component={NotFound} /></Switch>;
 }
 
-function RoutedErrorBoundary({ children }: { children: ReactNode }) {
-  const [location] = useLocation();
-  return <ErrorBoundary resetKey={location}>{children}</ErrorBoundary>;
-}
-
+const queryClient = new QueryClient();
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
+  return <QueryClientProvider client={queryClient}><TooltipProvider><WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}><ErrorBoundary resetKey={window.location.pathname}><Router /></ErrorBoundary></WouterRouter><Toaster /></TooltipProvider></QueryClientProvider>;
 }
 
 export default App;
