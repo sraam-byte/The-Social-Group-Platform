@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "The Social Group"
+description = "A premium hospitality discovery platform for The Social Group of Restaurants, helping guests find the right brand, outlet, menu, offer, event, or dining experience across Klang Valley."
+version = "1.0.0"
+id = "artifacts/social-group"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23094
+
+[services.development]
+run = "pnpm --filter @workspace/social-group run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/social-group", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/social-group/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23094"
+BASE_PATH = "/"

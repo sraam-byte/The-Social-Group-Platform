@@ -1,0 +1,1852 @@
+# THE SOCIAL GROUP — WEBSITE & DIGITAL GROWTH PLATFORM
+
+## MASTER PRODUCT + DESIGN + ENGINEERING BRIEF
+
+You are building a new website from scratch for **The Social Group of Restaurants, Malaysia**.
+
+This is not a simple restaurant website and it is not a corporate brochure.
+
+The objective is to create a **high-end hospitality website that functions as a digital discovery, SEO, local-search, conversion and first-party customer acquisition platform**.
+
+The finished product must look premium and distinctive, but its underlying architecture must be designed around measurable business growth.
+
+---
+
+# 1. COMPANY
+
+## The Social Group of Restaurants
+
+Malaysia.
+
+Current brands:
+
+### 01 — The Social
+
+Contemporary social dining, food, drinks, neighbourhood atmosphere, gatherings, nightlife/social occasions.
+
+### 02 — Lisette’s Café & Bakery
+
+Café, bakery, wholesome food, lifestyle, seasonal food, quality ingredients, relaxed dining.
+
+### 03 — Cafe Deli by El Mesón
+
+Spanish-influenced casual dining, comfort, all-day dining, approachable food and family/social occasions.
+
+IMPORTANT:
+
+There may be additional brands in the future.
+
+The platform must therefore be **brand-agnostic and extensible**.
+
+Do not architect the application around exactly three brands.
+
+The CMS and frontend must support:
+
+```text
+Brand A
+Brand B
+Brand C
+Future Brand D
+Future Brand E
+...
+```
+
+A future brand must be addable primarily through CMS/content configuration without redesigning the application.
+
+---
+
+# 2. BUSINESS OBJECTIVE
+
+The website must perform six roles.
+
+## 1. BRAND
+
+Strengthen the reputation and perceived quality of The Social Group.
+
+## 2. DISCOVERY
+
+Help customers discover:
+
+* restaurants
+* brands
+* outlets
+* menus
+* dishes
+* experiences
+* offers
+* events
+
+## 3. SEO
+
+Capture valuable organic and local search demand.
+
+## 4. CONVERSION
+
+Drive:
+
+* bookings
+* orders
+* directions
+* calls
+* WhatsApp enquiries
+* event enquiries
+* rewards signups
+* offer engagement
+
+## 5. FIRST-PARTY CUSTOMER ACQUISITION
+
+Move customers from:
+
+```text
+Search / Social / Maps / AI
+→ Website
+→ Restaurant interaction
+→ First-party relationship
+```
+
+## 6. FUTURE DIGITAL PLATFORM
+
+Provide a foundation for:
+
+* CRM
+* loyalty
+* marketing automation
+* reservations
+* ordering
+* personalisation
+* new brands
+* new locations
+* new business models
+
+---
+
+# 3. STRATEGIC PRINCIPLE
+
+Do not think:
+
+> “Build a restaurant group website.”
+
+Think:
+
+> **“Build The Social Group's digital customer acquisition layer.”**
+
+The website should combine:
+
+```text
+DESIRE
++
+DISCOVERY
++
+DECISION
++
+ACTION
+```
+
+A beautiful website with no commercial usefulness is a failure.
+
+An SEO website with no emotional appeal is a failure.
+
+A conversion site with no brand identity is a failure.
+
+---
+
+# 4. TARGET AUDIENCE
+
+Primary audience:
+
+### Existing customers
+
+People who already know:
+
+* The Social
+* Lisette’s
+* Cafe Deli
+
+### New customers
+
+People searching for:
+
+* restaurants
+* cafes
+* food
+* drinks
+* brunch
+* casual dining
+* Spanish food
+* group dining
+* family dining
+* birthdays
+* private events
+
+### Local customers
+
+People searching by:
+
+* Bangsar
+* Desa ParkCity
+* Mont Kiara
+* Publika
+* Subang
+* Coalfields
+* surrounding neighbourhoods
+
+### Occasion-driven customers
+
+People planning:
+
+* lunch
+* dinner
+* brunch
+* happy hour
+* birthday
+* corporate dinner
+* group gathering
+* private event
+* weekend dining
+
+---
+
+# 5. CUSTOMER PSYCHOLOGY
+
+The website should quickly answer:
+
+### “Is this place for me?”
+
+### “What kind of experience is this?”
+
+### “Where is it?”
+
+### “What can I eat or drink?”
+
+### “What does it cost?”
+
+### “Is it good for my occasion?”
+
+### “Can I book/order/contact them?”
+
+### “Why should I choose them?”
+
+Reduce decision friction.
+
+Do not force users to navigate the company's internal structure to accomplish a simple task.
+
+---
+
+# 6. CORE UX CONCEPT
+
+The website should introduce a signature discovery experience:
+
+# FIND YOUR PLACE
+
+Example:
+
+## What are you looking for?
+
+* Brunch
+* Lunch
+* Dinner
+* Drinks
+* Happy Hour
+* Family Dining
+* Group Dining
+* Birthday
+* Private Event
+* Corporate Event
+* Coffee & Cake
+* Quick Meal
+* Takeaway / Delivery
+
+Then:
+
+## Where are you?
+
+* Bangsar
+* Desa ParkCity
+* Mont Kiara
+* Publika
+* Subang
+* Coalfields
+* etc.
+
+Return suitable:
+
+* brands
+* outlets
+* experiences
+* menus
+* offers
+* booking/order actions
+
+Example:
+
+```text
+The Social — Bangsar
+
+Dinner · Drinks · Groups
+
+[View Menu]
+[Book Table]
+[Directions]
+```
+
+The first version should be simple filtering/ranking logic.
+
+Do not build unnecessary AI.
+
+---
+
+# 7. HOMEPAGE
+
+The homepage should not resemble a conventional corporate restaurant group website.
+
+Recommended flow:
+
+## HERO
+
+Strong hospitality photography or video.
+
+The emotional message should communicate:
+
+**Good food. Good company. Different ways to dine.**
+
+Primary CTA:
+
+**Find Your Place**
+
+Secondary:
+
+**Explore Our Brands**
+
+---
+
+## DISCOVERY
+
+“What are you in the mood for?”
+
+---
+
+## BRANDS
+
+Present:
+
+* The Social
+* Lisette’s
+* Cafe Deli
+
+Use large visual storytelling.
+
+Do not use generic SaaS-style equal cards.
+
+---
+
+## LOCATIONS
+
+Help customers find a nearby outlet.
+
+---
+
+## WHAT'S HAPPENING
+
+Dynamic:
+
+* offers
+* events
+* campaigns
+* seasonal menus
+* new openings
+
+---
+
+## EXPERIENCES
+
+Examples:
+
+* brunch
+* happy hour
+* group dining
+* celebrations
+* private events
+
+---
+
+## FEATURED FOOD
+
+Use structured menu content.
+
+---
+
+## REWARDS
+
+Introduce the existing loyalty/customer ecosystem.
+
+---
+
+## GROUP STORY
+
+Short, credible, human.
+
+---
+
+## FINAL CTA
+
+Find a restaurant / book / order / enquire.
+
+---
+
+# 8. BRAND EXPRESSION
+
+The platform should share engineering patterns but allow every brand to feel different.
+
+## THE SOCIAL
+
+Core personality:
+
+* social
+* urban
+* lively
+* contemporary
+* approachable
+* food + drinks
+* gatherings
+* neighbourhood culture
+* evening energy
+
+Important:
+
+The Social must **not look like fine dining**.
+
+The visual direction should be:
+
+**refined + energetic + human + social**
+
+Use:
+
+* people
+* food
+* drinks
+* groups
+* evening scenes
+* movement
+* atmosphere
+
+The user should think:
+
+> “I want to be there.”
+
+Not:
+
+> “This is a very elegant website.”
+
+---
+
+## LISETTE’S
+
+Personality:
+
+* warm
+* wholesome
+* lifestyle
+* café
+* bakery
+* seasonal
+* relaxed
+* quality ingredients
+
+Can be softer and calmer than The Social.
+
+---
+
+## CAFE DELI
+
+Personality:
+
+* Spanish-influenced
+* approachable
+* casual
+* warm
+* family/social
+* comfort
+* all-day dining
+
+---
+
+# 9. DESIGN LANGUAGE
+
+The group-level aesthetic:
+
+* editorial
+* contemporary
+* confident
+* sophisticated
+* human
+* hospitality-led
+
+Avoid generic:
+
+* SaaS UI
+* startup landing pages
+* excessive rounded cards
+* excessive glassmorphism
+* fake luxury
+* giant decorative headings everywhere
+* gradients everywhere
+* over-animation
+* generic stock photography
+
+The design should feel **expensive because of composition and restraint**, not because of unnecessary visual effects.
+
+---
+
+# 10. COLOUR
+
+Start with:
+
+* warm whites
+* cream/off-white
+* charcoal
+* soft grey
+* carefully controlled accent colours
+
+Each brand may have its own accent language.
+
+The group site should maintain cohesion.
+
+Do not use generic corporate blue as the primary identity unless justified by actual brand assets.
+
+Do not invent a large colour system without reason.
+
+---
+
+# 11. TYPOGRAPHY
+
+Use an editorial hierarchy.
+
+Define:
+
+* display
+* H1
+* H2
+* H3
+* body
+* caption
+* label
+* CTA
+
+Typography must balance:
+
+* sophistication
+* legibility
+* personality
+
+Do not overuse bold weights.
+
+Do not use unlicensed fonts.
+
+---
+
+# 12. PHOTOGRAPHY
+
+Photography is a major conversion asset.
+
+Prioritise:
+
+* real food
+* real restaurants
+* people
+* drinks
+* atmosphere
+* events
+* outlet-specific imagery
+* neighbourhood context
+
+Use placeholders during development.
+
+Design the CMS so final photography can replace placeholders without changing layouts.
+
+Use responsive image handling.
+
+---
+
+# 13. INFORMATION ARCHITECTURE
+
+Recommended top-level structure:
+
+```text
+/
+├── brands/
+│   ├── the-social/
+│   ├── lisettes/
+│   └── cafe-deli/
+│
+├── locations/
+│
+├── experiences/
+│
+├── offers/
+│
+├── events/
+│
+├── menus/
+│
+├── journal/
+│
+├── about/
+│
+├── careers/
+└── contact/
+```
+
+The exact URL hierarchy should be validated against:
+
+* SEO
+* user intent
+* scalability
+* CMS relationships
+* duplicate-content risk
+
+---
+
+# 14. BRAND PAGES
+
+Each brand page should support, where relevant:
+
+* hero
+* positioning
+* story
+* food/cuisine
+* signature dishes
+* atmosphere
+* experiences
+* menus
+* locations
+* offers
+* events
+* gallery
+* booking
+* ordering
+* rewards
+* social links
+
+Do not force irrelevant sections onto every brand.
+
+---
+
+# 15. LOCATION PAGES
+
+Every meaningful physical outlet should eventually have a dedicated page.
+
+A location page must contain:
+
+* brand
+* outlet name
+* neighbourhood
+* address
+* map
+* coordinates
+* phone
+* opening hours
+* holiday hours
+* parking
+* accessibility
+* seating
+* indoor/outdoor
+* family suitability
+* group suitability
+* menu
+* featured dishes
+* offers
+* events
+* booking
+* ordering
+* WhatsApp
+* directions
+* gallery
+* FAQs
+
+The page must be useful as a standalone Google landing page.
+
+---
+
+# 16. LOCAL SEO
+
+Each outlet should be treated as a unique local business entity.
+
+Use appropriate Restaurant / LocalBusiness structured data.
+
+Support accurate information:
+
+* name
+* address
+* phone
+* geo
+* opening hours
+* menu
+* cuisine
+* image
+* URL
+
+Use:
+
+https://developers.google.com/search/docs/appearance/structured-data/local-business
+
+Do not fabricate structured data.
+
+---
+
+# 17. GOOGLE BUSINESS PROFILE
+
+The website should act as the official digital information layer supporting the group's Google Business Profiles.
+
+Maintain consistency among:
+
+```text
+CMS
+↓
+Website
+↓
+Location Page
+↓
+Google Business Profile
+↓
+Search / Maps
+```
+
+Information should remain consistent for:
+
+* address
+* phone
+* hours
+* URL
+* menu
+* location
+* services
+
+---
+
+# 18. MENU SYSTEM
+
+Menus must be structured data.
+
+Use:
+
+```text
+Menu
+→ Category
+→ Menu Item
+```
+
+Menu item fields:
+
+* name
+* description
+* price
+* image
+* dietary information
+* allergens where applicable
+* availability
+* featured
+* brand
+* outlet
+* category
+
+HTML menu content is primary.
+
+PDF is optional.
+
+---
+
+# 19. EXPERIENCE SYSTEM
+
+Create reusable experience entities:
+
+* brunch
+* lunch
+* dinner
+* happy hour
+* drinks
+* family dining
+* group dining
+* birthdays
+* private events
+* corporate events
+* live sports
+* takeaway
+* delivery
+* coffee & cake
+
+Experiences may relate to:
+
+* brands
+* locations
+* menus
+* offers
+* events
+
+---
+
+# 20. EVENTS
+
+Create structured event records:
+
+* title
+* description
+* date
+* time
+* brand
+* outlet
+* image
+* booking
+* enquiry
+* status
+
+Expired events should stop appearing in active listings automatically.
+
+---
+
+# 21. OFFERS
+
+Offer records must support:
+
+* title
+* description
+* brand
+* outlet
+* image
+* start date
+* end date
+* terms
+* CTA
+* booking link
+* order link
+* loyalty requirement if appropriate
+
+Marketing should be able to create/update offers without a developer.
+
+---
+
+# 22. PRIVATE EVENTS / HIGH-VALUE LEADS
+
+Create dedicated conversion pages for:
+
+* birthdays
+* corporate dinners
+* networking
+* private parties
+* product launches
+* group dining
+* venue hire
+
+Provide:
+
+* capacity
+* facilities
+* packages
+* menus
+* gallery
+* outlet options
+* enquiry form
+* WhatsApp
+* phone
+
+Treat these as commercial lead-generation pages.
+
+---
+
+# 23. CMS REQUIREMENT
+
+The CMS must be easy enough for non-technical Marketing/Operations staff.
+
+They must be able to manage:
+
+* brands
+* outlets
+* hours
+* menus
+* menu items
+* offers
+* events
+* experiences
+* articles
+* images
+* SEO metadata
+
+without editing React code.
+
+---
+
+# 24. CMS EVALUATION
+
+Evaluate:
+
+* Sanity
+* Payload
+* Strapi
+
+Compare:
+
+* Next.js compatibility
+* editor experience
+* content relationships
+* media management
+* permissions
+* API
+* scalability
+* pricing
+* hosting
+* backups
+* exportability
+* SEO
+* maintainability
+
+Then recommend one.
+
+Do not install the CMS until the content model and technical architecture are defined.
+
+---
+
+# 25. CMS CONTENT MODEL
+
+At minimum:
+
+## Site Settings
+
+* site name
+* logos
+* navigation
+* contact details
+* social links
+* footer
+* analytics configuration
+
+## Brand
+
+* name
+* slug
+* logo
+* positioning
+* description
+* story
+* colours
+* hero media
+* gallery
+* social links
+* booking/order links
+* SEO
+
+## Outlet
+
+* brand
+* name
+* slug
+* address
+* coordinates
+* phone
+* hours
+* holiday hours
+* facilities
+* seating
+* parking
+* booking URL
+* order URL
+* map URL
+* GBP URL
+* images
+* SEO
+
+## Menu
+
+* brand
+* outlet
+* name
+* categories
+
+## Menu Item
+
+* category
+* name
+* description
+* price
+* image
+* dietary tags
+* allergens
+* featured
+* availability
+
+## Experience
+
+* title
+* slug
+* description
+* brands
+* outlets
+* imagery
+* CTA
+* SEO
+
+## Offer
+
+* title
+* brand
+* outlet
+* description
+* dates
+* terms
+* CTA
+* image
+* SEO
+
+## Event
+
+* title
+* brand
+* outlet
+* date
+* time
+* description
+* image
+* booking
+* SEO
+
+## Journal / Guide
+
+* title
+* slug
+* content
+* author
+* date
+* category
+* hero image
+* related brands
+* related locations
+* related experiences
+* SEO
+
+## Award
+
+* brand
+* title
+* organisation
+* year
+* description
+* image
+
+## FAQ
+
+* question
+* answer
+* brand
+* outlet
+* page relationship
+
+---
+
+# 26. FUTURE BRAND ARCHITECTURE
+
+This is mandatory.
+
+The frontend must NOT have hard-coded brand lists such as:
+
+```text
+The Social
+Lisette's
+Cafe Deli
+```
+
+inside business logic.
+
+Brands should be data-driven.
+
+A future brand should be created in the CMS and become available throughout:
+
+* navigation where applicable
+* homepage
+* brand directory
+* brand page
+* locations
+* menus
+* offers
+* events
+* experiences
+* search
+* sitemap
+
+without requiring major frontend refactoring.
+
+---
+
+# 27. SEO STRATEGY
+
+SEO is a core product requirement.
+
+Every indexable page should support:
+
+* title
+* meta description
+* canonical
+* Open Graph metadata
+* proper headings
+* breadcrumbs
+* internal links
+* structured data where appropriate
+* sitemap inclusion
+
+---
+
+# 28. SEO PAGE TYPES
+
+Build a keyword-intent map for:
+
+## Brand
+
+The Social
+Lisette’s
+Cafe Deli
+
+## Local
+
+restaurant Bangsar
+restaurant Desa ParkCity
+restaurant Mont Kiara
+restaurant Publika
+restaurant Subang
+restaurant Coalfields
+
+## Cuisine
+
+Spanish restaurant
+café
+brunch
+pizza
+bar
+etc.
+
+## Occasion
+
+birthday restaurant
+family dining
+group dining
+corporate dinner
+private event
+
+## Experience
+
+happy hour
+weekend brunch
+drinks
+live sports
+etc.
+
+## Transaction
+
+restaurant menu
+book restaurant
+order delivery
+restaurant near me
+
+Do not generate pages solely for keywords.
+
+Every SEO page must have genuine user value.
+
+---
+
+# 29. LOCAL SEO STRATEGY
+
+Prioritise:
+
+* neighbourhood
+* cuisine
+* experience
+* occasion
+* local commercial intent
+
+Think:
+
+```text
+restaurant + location
+experience + location
+occasion + location
+cuisine + location
+```
+
+rather than generic high-volume keywords only.
+
+---
+
+# 30. CONTENT STRATEGY
+
+Do not create a generic food blog.
+
+Build a first-party content moat.
+
+Examples:
+
+* what to order
+* outlet guides
+* parking guides
+* best times to visit
+* group dining
+* birthday dining
+* event guides
+* seasonal menus
+* chef stories
+* brand stories
+* outlet launch stories
+* behind-the-scenes
+
+Only create content that the operator can credibly provide.
+
+---
+
+# 31. AI SEARCH
+
+Optimise for comprehension rather than gimmicks.
+
+The website must make it easy for search/AI systems to understand:
+
+* what The Social Group is
+* what each brand does
+* where each outlet is
+* what food is served
+* what experiences are available
+* when outlets are open
+* how to book/order/contact
+
+Do not rely on fake “GEO hacks”.
+
+Use:
+
+* factual content
+* structured information
+* strong internal linking
+* structured data
+* authoritative first-party content
+
+---
+
+# 32. COALFIELDS
+
+Treat Bandar Seri Coalfields as a strategic growth opportunity.
+
+Build a strong local landing experience when the relevant outlet is live.
+
+Cover genuine search intent around:
+
+* Bandar Seri Coalfields
+* Coalfields Retail Park
+* Sungai Buloh
+* Puncak Alam
+* Kuala Selangor
+* Rawang
+* surrounding catchments
+
+Do not create dozens of thin pages.
+
+Create one highly useful local page supported by relevant content.
+
+---
+
+# 33. REVENUE ARCHITECTURE
+
+Every important page needs a primary commercial action.
+
+Examples:
+
+### Location
+
+Book
+Order
+Directions
+Call
+
+### Menu
+
+Order
+Book
+
+### Experience
+
+Find Outlet
+Book
+
+### Offer
+
+Book
+Order
+Claim
+
+### Event
+
+Enquire
+WhatsApp
+Call
+
+### Brand
+
+View Menu
+Find Locations
+
+The site should never leave the customer at a dead end.
+
+---
+
+# 34. FIRST-PARTY DATA
+
+Where appropriate, integrate the existing loyalty/rewards ecosystem.
+
+Potential flow:
+
+```text
+Search
+↓
+Website
+↓
+Content / restaurant
+↓
+Transaction
+↓
+Rewards
+↓
+Repeat visit
+```
+
+Do not duplicate existing loyalty technology.
+
+Connect to it.
+
+---
+
+# 35. ANALYTICS
+
+Implement:
+
+* Google Analytics
+* Google Search Console
+* Google Tag Manager where justified
+
+Track:
+
+### Discovery
+
+`view_brand`
+
+`view_location`
+
+`view_menu`
+
+`view_experience`
+
+`view_offer`
+
+`view_event`
+
+### Conversion
+
+`click_booking`
+
+`click_order`
+
+`click_directions`
+
+`click_phone`
+
+`click_whatsapp`
+
+`submit_event_enquiry`
+
+`signup_rewards`
+
+Include useful parameters such as:
+
+* brand
+* location
+* experience
+* campaign
+* source
+
+---
+
+# 36. REVENUE REPORTING
+
+The business should eventually be able to measure:
+
+```text
+Organic
+→ Brand
+→ Location
+→ Menu
+→ Booking
+```
+
+```text
+Organic
+→ Experience
+→ Event enquiry
+```
+
+```text
+Organic
+→ Offer
+→ Order / booking
+```
+
+```text
+Organic
+→ Rewards
+→ Signup
+```
+
+Do not optimise solely for traffic.
+
+Optimise for:
+
+**qualified traffic → commercial action.**
+
+---
+
+# 37. TECHNICAL STACK
+
+Recommended baseline:
+
+* Next.js
+* TypeScript
+* Tailwind CSS
+* selected headless CMS
+* modern image optimisation
+* analytics
+* SEO tooling
+* structured data
+* reliable form infrastructure
+
+Use Server Components by default.
+
+Use Client Components only where necessary.
+
+Avoid unnecessary libraries.
+
+---
+
+# 38. PERFORMANCE
+
+Prioritise:
+
+* fast LCP
+* low INP
+* low CLS
+* responsive images
+* modern image formats
+* lazy loading
+* minimal client JavaScript
+* efficient fonts
+* limited third-party scripts
+
+Use Next.js image optimisation appropriately.
+
+---
+
+# 39. ACCESSIBILITY
+
+Implement:
+
+* semantic HTML
+* correct headings
+* keyboard navigation
+* focus states
+* accessible forms
+* alt text
+* colour contrast
+* reduced motion
+* correct link/button semantics
+
+Never nest links.
+
+---
+
+# 40. SECURITY
+
+Review:
+
+* CMS credentials
+* API keys
+* environment variables
+* forms
+* spam protection
+* uploads
+* headers
+* dependencies
+* rate limiting where appropriate
+
+Never expose secrets in browser code.
+
+---
+
+# 41. MOBILE-FIRST
+
+Mobile is a primary environment.
+
+Prioritise:
+
+* Book
+* Order
+* Menu
+* Call
+* Directions
+* WhatsApp
+
+Consider sticky mobile actions on location pages.
+
+---
+
+# 42. FUTURE INTEGRATIONS
+
+Architect for potential future integrations with:
+
+* reservation system
+* ordering
+* loyalty
+* CRM
+* marketing automation
+* POS
+* delivery
+* customer data platforms
+
+Do not build these integrations unless required during the current phase.
+
+Build clean interfaces so they can be added later.
+
+---
+
+# 43. DESIGN / ENGINEERING PRINCIPLE
+
+Do not create a visually impressive but technically rigid website.
+
+Do not create a technically elegant but emotionally lifeless website.
+
+The balance is:
+
+```text
+BRAND
++
+UX
++
+SEO
++
+LOCAL
++
+CONVERSION
++
+CONTENT
++
+TECHNICAL QUALITY
+```
+
+---
+
+# 44. DEVELOPMENT PROCESS
+
+Build in controlled phases.
+
+## PHASE 0 — DISCOVERY / AUDIT
+
+Before coding, research:
+
+* company
+* brands
+* outlets
+* current websites
+* Google Business Profiles
+* competitors
+* audience
+* search intent
+* local geography
+* customer journey
+
+Return findings.
+
+---
+
+## PHASE 1 — PRODUCT ARCHITECTURE
+
+Produce:
+
+* sitemap
+* URL strategy
+* navigation
+* page types
+* customer journeys
+* conversion paths
+
+---
+
+## PHASE 2 — CMS ARCHITECTURE
+
+Produce:
+
+* CMS comparison
+* CMS recommendation
+* content model
+* relationships
+* roles
+* workflows
+* media strategy
+
+---
+
+## PHASE 3 — SEO ARCHITECTURE
+
+Produce:
+
+* keyword-intent map
+* local SEO strategy
+* schema strategy
+* metadata structure
+* internal linking
+* sitemap
+* canonical strategy
+
+---
+
+## PHASE 4 — DESIGN SYSTEM
+
+Produce:
+
+* typography
+* colours
+* spacing
+* layout grid
+* buttons
+* navigation
+* imagery
+* responsive rules
+* motion principles
+* brand differentiation
+
+---
+
+## PHASE 5 — HOMEPAGE
+
+Build and test.
+
+---
+
+## PHASE 6 — THE SOCIAL
+
+Build fully.
+
+---
+
+## PHASE 7 — LISETTE’S
+
+Build fully.
+
+---
+
+## PHASE 8 — CAFE DELI
+
+Build fully.
+
+---
+
+## PHASE 9 — LOCATIONS
+
+Build scalable location system.
+
+---
+
+## PHASE 10 — MENUS
+
+Build structured menu system.
+
+---
+
+## PHASE 11 — EXPERIENCES / OFFERS / EVENTS
+
+Build commercial content systems.
+
+---
+
+## PHASE 12 — ANALYTICS
+
+Implement event tracking.
+
+---
+
+## PHASE 13 — SEO / LOCAL SEO
+
+Implement technical SEO.
+
+---
+
+## PHASE 14 — PERFORMANCE / ACCESSIBILITY
+
+Audit and improve.
+
+---
+
+## PHASE 15 — PRODUCTION
+
+Validate:
+
+* domain
+* hosting
+* DNS
+* SSL
+* redirects
+* analytics
+* search indexing
+* forms
+* mobile
+* performance
+* SEO
+* structured data
+
+---
+
+# 45. CHANGE CONTROL
+
+This project is expected to evolve.
+
+Do not make uncontrolled architectural changes.
+
+Before a major architecture change, state:
+
+### What is changing?
+
+### Why?
+
+### What depends on it?
+
+### Files/components affected?
+
+### Risks?
+
+### Test plan?
+
+### Rollback plan?
+
+Do not rename folders casually.
+
+Do not create duplicate systems.
+
+Do not create multiple versions of the same component.
+
+Do not install packages without justification.
+
+---
+
+# 46. REQUIRED FIRST RESPONSE
+
+Before writing code, return:
+
+## 1. Business analysis
+
+## 2. Customer/audience analysis
+
+## 3. Competitor analysis
+
+## 4. Search-intent analysis
+
+## 5. Local/geo analysis
+
+## 6. Recommended digital strategy
+
+## 7. Complete sitemap
+
+## 8. URL architecture
+
+## 9. CMS comparison
+
+## 10. Recommended CMS
+
+## 11. Full CMS schema
+
+## 12. SEO architecture
+
+## 13. Local SEO architecture
+
+## 14. Conversion architecture
+
+## 15. Analytics strategy
+
+## 16. Design direction
+
+## 17. Component architecture
+
+## 18. Technical architecture
+
+## 19. Development phases
+
+## 20. Risks
+
+## 21. Assumptions
+
+## 22. Open questions
+
+Do not begin implementation until this planning stage is complete.
+
+---
+
+# 47. SUCCESS CRITERIA
+
+The finished platform should:
+
+### Brand
+
+Make The Social Group feel established, desirable and credible.
+
+### UX
+
+Allow customers to find the right restaurant quickly.
+
+### SEO
+
+Own valuable brand, local, cuisine, occasion and experience searches.
+
+### Local
+
+Give each physical outlet a strong searchable digital presence.
+
+### Conversion
+
+Make booking, ordering, directions and enquiries easy.
+
+### CMS
+
+Allow Marketing/Operations to manage content without developers.
+
+### Analytics
+
+Make customer acquisition and conversion measurable.
+
+### Performance
+
+Be fast on mobile and desktop.
+
+### Scalability
+
+Allow new brands and outlets without major architectural changes.
+
+---
+
+# FINAL PRODUCT VISION
+
+The finished website should not feel like:
+
+> “Here is our restaurant group.”
+
+It should feel like:
+
+> **“Tell us what you're looking for. We'll help you find your place.”**
+
+The emotional layer makes customers want to visit.
+
+The information architecture helps them decide.
+
+The SEO architecture helps them find you.
+
+The conversion architecture helps them act.
+
+The CMS allows the business to keep the platform alive.
+
+The analytics layer tells management what actually works.
+
+Build the platform accordingly.
