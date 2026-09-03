@@ -9,6 +9,11 @@ export type MenuItem = {
   price: string;
 };
 
+export type MenuLink = {
+  label: string;
+  url: string;
+};
+
 export type Outlet = {
   id: string;
   name: string;
@@ -23,6 +28,9 @@ export type Outlet = {
   accent: string;
   image: string;
   menu: MenuItem[];
+  bookingUrl?: string;
+  orderingUrl?: string;
+  mapsUrl?: string;
 };
 
 export type BrandDetail = {
@@ -32,6 +40,9 @@ export type BrandDetail = {
   colour: string;
   image: string;
   fact: string;
+  officialUrl: string;
+  instagramUrl: string;
+  menuLinks: MenuLink[];
   menuPdf: {
     name: string;
     url: string;
@@ -100,6 +111,7 @@ export type SiteContent = {
     eyebrow: string;
     title: string;
     copy: string;
+    downloadUrl: string;
     appStoreUrl: string;
     googlePlayUrl: string;
   };
@@ -118,48 +130,73 @@ export type ContentState = {
 };
 
 export const initialContent: ContentState = {
-  version: 2,
+  version: 3,
   brands: {
     'The Social': {
       eyebrow: 'Good food. Good people. Good times.',
       title: 'The table is always bigger than you think.',
-      text: 'The Social is an urban neighbourhood kitchen and bar for the everyday celebrations: office lunches, cold beers, sourdough pizza, family dinners and nights that accidentally become late ones.',
+      text: 'Established since 2001, The Social is a neighbourhood bar with more than 240 labels, sourdough pizzas from the wood-fired oven, local and international flavours, and warm service for lunches, happy hours, family dinners and late game nights.',
       colour: '#e15d3b',
       image: '/images/hero-table.jpg',
       fact: '240+ labels behind the bar',
+      officialUrl: 'https://thesocial.com.my/',
+      instagramUrl: 'https://www.instagram.com/thesocial.my',
+      menuLinks: [
+        { label: 'À la carte', url: 'https://thesocial.com.my/alacarte-menu/' },
+        { label: 'Sourdough pizzas', url: 'https://thesocial.com.my/pizza-menu' },
+        { label: 'Weekday lunch', url: 'https://thesocial.com.my/set-lunch-menu' },
+        { label: 'STIKS', url: 'https://thesocial.com.my/stiks-menu' },
+        { label: 'Beverage', url: 'https://thesocial.com.my/beverage-menu' },
+      ],
       menuPdf: { name: '', url: '' },
     },
     'Lisette’s Café & Bakery': {
       eyebrow: 'Baked slowly. Lived fully.',
       title: 'A softer start to the day.',
-      text: 'Lisette’s is about good bread, seasonal plates and taking the long way through your morning. A wholesome neighbourhood bakery café with a little French ease and a lot of local warmth.',
+      text: 'Lisette’s is in pursuit of the heart of good food, sourcing natural and organic ingredients wherever possible without compromising on deliciousness. From seasonal beautiful buffets to everyday menus, everyone belongs at the same table.',
       colour: '#839a7a',
       image: '/images/lisettes-bakery.jpg',
       fact: 'Bread, pastries & all-day brunch',
+      officialUrl: 'https://lisettes.com.my/',
+      instagramUrl: 'https://www.instagram.com/lisettes.my/',
+      menuLinks: [
+        { label: 'À la carte', url: 'https://lisettes.com.my/alacarte-menu/' },
+        { label: 'Breakfast', url: 'https://lisettes.com.my/breakfast-menu' },
+        { label: 'Cakes & bakes', url: 'https://lisettes.com.my/bakes-menu' },
+        { label: 'Beverages', url: 'https://lisettes.com.my/beverage-menu' },
+      ],
       menuPdf: { name: '', url: '' },
     },
     'Cafe Deli by El Mesón': {
       eyebrow: 'A little Spain, all day long.',
       title: 'Pull up a chair, stay for another.',
-      text: 'Cafe Deli brings the warmth of an old-school Spanish deli to the neighbourhood: generous plates, great coffee, and food that makes a quick stop feel like a proper pause.',
+      text: 'Cafe Deli by El Mesón brings the best of Spain through authentic and traditional fare, with an all-day Spanish dining experience, family-friendly setting, and favourite porky selections matched to the local palate.',
       colour: '#31566b',
       image: '/images/cafe-deli.jpg',
       fact: 'Spanish plates & proper coffee',
+      officialUrl: 'https://cafedeli.com.my/',
+      instagramUrl: 'https://www.instagram.com/cafedeli.my',
+      menuLinks: [
+        { label: 'Breakfast', url: 'https://cafedeli.com.my/breakfast-menu' },
+        { label: 'À la carte', url: 'https://cafedeli.com.my/alacarte-menu' },
+        { label: 'Weekday lunch', url: 'https://cafedeli.com.my/set-lunch' },
+        { label: 'Beverages', url: 'https://cafedeli.com.my/beverage-menu/' },
+      ],
       menuPdf: { name: '', url: '' },
     },
   },
   outlets: [
     {
-      id: 'bangsar',
+      id: 'social-bangsar',
       name: 'Bangsar',
       brand: 'The Social',
       area: 'Bangsar, Kuala Lumpur',
       type: 'Neighbourhood bar & kitchen',
-      description: 'Your regular table, turned up a notch. Come for a long lunch, stay through happy hour and let the playlist take it from there.',
+      description: 'A neighbourhood bar for office lunches, happy hour, family dinners and late nights over food and drinks.',
       tags: ['Sourdough pizza', '240+ beers', 'Late nights'],
       occasions: ['Dinner', 'Drinks', 'A big celebration'],
       capacity: 'Up to 100 guests',
-      hours: '11:30am – 1:00am',
+      hours: 'Open daily · 11:30am till midnight',
       accent: '#e15d3b',
       image: '/images/hero-table.jpg',
       menu: [
@@ -167,9 +204,12 @@ export const initialContent: ContentState = {
         { name: 'Crispy Chicken Burger', description: 'Pickles, slaw, house sauce, fries', price: 'RM 34' },
         { name: 'Passionfruit Spritz', description: 'Aperitif, passionfruit, bubbles, lime', price: 'RM 28' },
       ],
+      bookingUrl: 'https://letsumai.com/partner/widget/the-social',
+      orderingUrl: 'https://eats.thesocialgroup.com.my/#/1/home',
+      mapsUrl: 'https://www.google.com/maps/place/The+Social+@+Bangsar/@3.130534,101.670946,15z',
     },
     {
-      id: 'publika',
+      id: 'social-publika',
       name: 'Publika',
       brand: 'The Social',
       area: 'Solaris Dutamas, Kuala Lumpur',
@@ -186,9 +226,12 @@ export const initialContent: ContentState = {
         { name: 'Mushroom Truffle Pizza', description: 'Roasted mushroom, mozzarella, truffle cream', price: 'RM 38' },
         { name: 'Social Lager', description: 'Cold, crisp, uncomplicated', price: 'RM 16' },
       ],
+      bookingUrl: 'https://letsumai.com/partner/widget/the-social',
+      orderingUrl: 'https://eats.thesocialgroup.com.my/#/1/home',
+      mapsUrl: 'https://www.google.com/maps/place/The+Social+@+Publika/@3.1711577,101.6669759,15z',
     },
     {
-      id: 'empire',
+      id: 'social-empire',
       name: 'Empire Subang',
       brand: 'The Social',
       area: 'Empire Shopping Gallery, Subang Jaya',
@@ -205,44 +248,141 @@ export const initialContent: ContentState = {
         { name: 'Mac & Cheese', description: 'Three cheese sauce, pangrattato, herbs', price: 'RM 25' },
         { name: 'Peanut Butter Stack', description: 'Banana, chocolate, toasted peanuts', price: 'RM 19' },
       ],
+      bookingUrl: 'https://letsumai.com/partner/widget/the-social',
+      orderingUrl: 'https://eats.thesocialgroup.com.my/#/1/home',
+      mapsUrl: 'https://www.google.com/maps/place/The+Social+@+Empire+Subang/@3.081759,101.5829859,15z',
     },
     {
-      id: 'desapark',
+      id: 'social-desapark',
       name: 'Desa ParkCity',
+      brand: 'The Social',
+      area: 'Desa ParkCity, Kuala Lumpur',
+      type: 'Neighbourhood bar & kitchen',
+      description: 'The Social’s Desa ParkCity room for neighbourhood gatherings, shared plates, drinks and easy-going nights.',
+      tags: ['Neighbourhood bar', 'Happy hour', 'Family friendly'],
+      occasions: ['Dinner', 'Drinks', 'Family time'],
+      capacity: 'Up to 140 guests',
+      hours: 'Open daily · 11:30am till midnight',
+      accent: '#e15d3b',
+      image: '/images/hero-table.jpg',
+      menu: [
+        { name: 'Sourdough pizza', description: 'Wood-fired pizza and generous toppings', price: 'See menu' },
+        { name: 'Shared plates', description: 'Local and international flavours for the table', price: 'See menu' },
+        { name: 'Cold beer', description: 'A wide range of labels behind the bar', price: 'See menu' },
+      ],
+      bookingUrl: 'https://letsumai.com/partner/widget/the-social',
+      orderingUrl: 'https://eats.thesocialgroup.com.my/#/1/home',
+      mapsUrl: 'https://www.google.com/maps/place/The+Social+@+Desa+ParkCity/@3.1869825,101.6281771,15z',
+    },
+    {
+      id: 'social-163',
+      name: '163 Retail Park',
+      brand: 'The Social',
+      area: '163 Retail Park, Mont Kiara, Kuala Lumpur',
+      type: 'Neighbourhood bar & kitchen',
+      description: 'The Social’s 163 Retail Park room for easy lunches, drinks, shared plates and a good reason to stay longer.',
+      tags: ['Neighbourhood bar', 'Happy hour', 'Big tables'],
+      occasions: ['Dinner', 'Drinks', 'Family time'],
+      capacity: 'Up to 120 guests',
+      hours: 'Open daily · 11:30am till midnight',
+      accent: '#e15d3b',
+      image: '/images/hero-table.jpg',
+      menu: [
+        { name: 'Sourdough pizza', description: 'Wood-fired pizza and generous toppings', price: 'See menu' },
+        { name: 'Social plates', description: 'Local and international flavours for sharing', price: 'See menu' },
+        { name: 'Cold beer', description: 'A wide range of labels behind the bar', price: 'See menu' },
+      ],
+      bookingUrl: 'https://letsumai.com/partner/widget/the-social',
+      orderingUrl: 'https://eats.thesocialgroup.com.my/#/1/home',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=The+Social+163+Retail+Park',
+    },
+    {
+      id: 'lisettes-bangsar',
+      name: 'Bangsar',
       brand: 'Lisette’s Café & Bakery',
-      area: 'The Waterfront, Desa ParkCity',
-      type: 'Bakery café',
-      description: 'Slow mornings, good bread and the kind of coffee break that makes the rest of the day behave.',
-      tags: ['Fresh bakes', 'All-day brunch', 'Dog friendly'],
+      area: '8, Jalan Kemuja, Bangsar, 59000 Kuala Lumpur',
+      type: 'Café & bakery',
+      description: 'Fresh brewed coffee, beautiful brunch, delectable bakes and a bright, leafy place to find laughter and joy.',
+      tags: ['Fresh bakes', 'Brunch', 'Natural ingredients'],
       occasions: ['Brunch', 'Family time'],
-      capacity: 'Up to 65 guests',
-      hours: '8:00am – 10:00pm',
+      capacity: 'Add capacity',
+      hours: 'Open daily · 8:00am till 7:00pm',
       accent: '#839a7a',
       image: '/images/lisettes-bakery.jpg',
       menu: [
-        { name: 'Lisette’s Sourdough Toast', description: 'Avocado, poached egg, dukkah, lemon', price: 'RM 24' },
-        { name: 'Seasonal Danish', description: 'Market fruit, almond frangipane, glaze', price: 'RM 14' },
-        { name: 'Iced Oat Latte', description: 'House espresso, oat milk, vanilla', price: 'RM 15' },
+        { name: 'All-day brunch', description: 'Seasonal plates made for lingering', price: 'See menu' },
+        { name: 'Cakes & bakes', description: 'Fresh pastries and beautiful bakes', price: 'See menu' },
+        { name: 'Fresh brewed coffee', description: 'A proper pause in the day', price: 'See menu' },
       ],
+      bookingUrl: 'https://letsumai.com/partner/widget/lisette-s',
+      orderingUrl: 'https://eats.thesocialgroup.com.my/#/3/home',
+      mapsUrl: 'https://www.google.com/maps/place/Lisette%27s+Caf%C3%A9+%26+Bakery+@+Bangsar/@3.1296548,101.6798452,15z',
     },
     {
-      id: '163',
+      id: 'lisettes-163',
+      name: '163 Retail Park',
+      brand: 'Lisette’s Café & Bakery',
+      area: 'GF-18, Ground Floor 163 Retail Park, 8, Jalan Kiara, Mont Kiara, 50480 Kuala Lumpur',
+      type: 'Café & bakery',
+      description: 'A bright, airy café surrounded by nature for coffee, brunch, cakes, bakes and a little afternoon indulgence.',
+      tags: ['Fresh bakes', 'All-day brunch', 'Afternoon tea'],
+      occasions: ['Brunch', 'Family time'],
+      capacity: 'Add capacity',
+      hours: 'Open daily · 8:00am till 9:00pm',
+      accent: '#839a7a',
+      image: '/images/lisettes-bakery.jpg',
+      menu: [
+        { name: 'Beautiful brunch', description: 'Seasonal plates and everyday favourites', price: 'See menu' },
+        { name: 'Cakes & bakes', description: 'Delectable bakes for every occasion', price: 'See menu' },
+        { name: 'Tea for two', description: 'A little afternoon indulgence', price: 'See menu' },
+      ],
+      bookingUrl: 'https://letsumai.com/widget/lisette-s-cafe-bakery-163',
+      orderingUrl: 'https://eats.thesocialgroup.com.my/#/3/home',
+      mapsUrl: 'https://www.google.com/maps/place/Lisette%27s+Caf%C3%A9+%26+Bakery+@+163+Retail+Park/@3.1664854,101.652322,15z',
+    },
+    {
+      id: 'cafe-deli-163',
       name: '163 Retail Park',
       brand: 'Cafe Deli by El Mesón',
-      area: 'Mont Kiara, Kuala Lumpur',
-      type: 'Spanish-influenced café deli',
-      description: 'A warm all-day stop for a cortado, a plate of something savoury and one more conversation before heading home.',
-      tags: ['All-day', 'Spanish plates', 'Takeaway'],
+      area: 'GF-16, Ground Floor, 163 Retail Park, No 8, Jalan Kiara, Mont Kiara, 50480 Kuala Lumpur',
+      type: 'Spanish café deli',
+      description: 'All-day Spanish dining, from bright early breakfasts to long tapas dinners, with warm Spanish hospitality.',
+      tags: ['Spanish plates', 'Porky favourites', 'All-day dining'],
       occasions: ['Brunch', 'Dinner', 'Family time'],
-      capacity: 'Up to 55 guests',
-      hours: '9:00am – 10:00pm',
+      capacity: 'Add capacity',
+      hours: 'Open daily · 9:00am till 10:00pm',
       accent: '#31566b',
       image: '/images/cafe-deli.jpg',
       menu: [
-        { name: 'Pan Con Tomate', description: 'Grilled sourdough, ripe tomato, olive oil, sea salt', price: 'RM 16' },
-        { name: 'Tortilla Española', description: 'Potato, onion, eggs, alioli', price: 'RM 22' },
-        { name: 'El Mesón Cortado', description: 'Double espresso, silky steamed milk', price: 'RM 11' },
+        { name: 'Pan con tomate', description: 'A simple taste of Spain', price: 'See menu' },
+        { name: 'Spanish porky favourites', description: 'Traditional fare with a local palate in mind', price: 'See menu' },
+        { name: 'Boozy concoctions', description: 'Drinks for an al fresco afternoon or evening', price: 'See menu' },
       ],
+      bookingUrl: 'https://letsumai.com/partner/widget/cafe-deli-by-el-meson',
+      orderingUrl: 'https://eats.thesocialgroup.com.my/#/4/home',
+      mapsUrl: 'https://www.google.com/maps/place/Caf%C3%A9+Deli+by+El+Mes%C3%B3n+@+163+Retail+Park/@3.1669226,101.6522001,15z',
+    },
+    {
+      id: 'cafe-deli-desapark',
+      name: 'Desa ParkCity',
+      brand: 'Cafe Deli by El Mesón',
+      area: 'Desa ParkCity, Kuala Lumpur',
+      type: 'Spanish café deli',
+      description: 'A family-friendly Spanish café deli for breakfast by the park, porky brunches and warm hospitality.',
+      tags: ['Spanish plates', 'Family friendly', 'Breakfast'],
+      occasions: ['Brunch', 'Dinner', 'Family time'],
+      capacity: 'Add capacity',
+      hours: 'Open daily · 9:00am till 10:00pm',
+      accent: '#31566b',
+      image: '/images/cafe-deli.jpg',
+      menu: [
+        { name: 'Breakfast by the park', description: 'A bright start with Spanish flavour', price: 'See menu' },
+        { name: 'Porky brunches', description: 'Cafe Deli favourites for a long lunch', price: 'See menu' },
+        { name: 'Pan & paellas', description: 'Fresh catch and traditional Spanish fare', price: 'See menu' },
+      ],
+      bookingUrl: 'https://letsumai.com/partner/widget/cafe-deli-by-el-meson',
+      orderingUrl: 'https://eats.thesocialgroup.com.my/#/4/home',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Cafe+Deli+by+El+Meson+Desa+ParkCity',
     },
   ],
   offers: [
@@ -306,13 +446,20 @@ export const initialContent: ContentState = {
       image: '/images/hero-table.jpg',
     },
   ],
-  awards: [],
+  awards: [
+    { id: 'social-hapa-bars', year: '2023–2024', title: 'Best Bars — The Social @ Desa ParkCity', organisation: 'HAPA Awards', note: 'Recognition stated on The Social official website.' },
+    { id: 'social-top-30-bars', year: '2022', title: 'Malaysia’s Top 30 Bars', organisation: 'Malaysia’s Top 30 Bars', note: 'Recognition stated on The Social official website.' },
+    { id: 'social-heineken-beer-bar', year: '2022', title: 'Top Beer Bar of the Year', organisation: 'Heineken', note: 'Recognition stated on The Social official website.' },
+    { id: 'lisettes-plant-based-chef', year: '2023 & 2024', title: 'Plant-based Cuisine Chef of the Year', organisation: 'HAPA Awards', note: 'Recognition stated on Lisette’s official website.' },
+    { id: 'lisettes-best-cafes', year: '2023 & 2024', title: 'Best Cafes — Lisette’s Café at 163 Retail Park', organisation: 'HAPA Awards', note: 'Recognition stated on Lisette’s official website.' },
+  ],
   site: {
     logo: { name: '', url: '' },
     app: {
       eyebrow: 'Social Rewards',
       title: 'Good things, in your pocket.',
-      copy: 'Use the Social Rewards app for membership, table bookings, delivery and take away. Add your live app links in Content Studio when they are ready.',
+      copy: 'Earn high-value points, access exclusive member daily rewards, birthday rewards, stamp cards and promotions. Use the Social Rewards app for membership, table bookings, delivery and take away.',
+      downloadUrl: 'https://thesocial.tsunago.asia/mobile/download',
       appStoreUrl: '',
       googlePlayUrl: '',
     },
@@ -328,26 +475,27 @@ function isContentState(value: unknown): value is ContentState {
 }
 
 function mergeContent(stored: Partial<ContentState>): ContentState {
-  const storedBrands = stored.brands ?? {};
+  const currentVersion = stored.version === initialContent.version;
+  const storedBrands = currentVersion ? (stored.brands ?? {}) : {};
   const brands = Object.fromEntries(
     Object.entries({ ...initialContent.brands, ...storedBrands }).map(([name, detail]) => [
       name,
       { ...initialContent.brands[name], ...detail, menuPdf: { ...initialContent.brands[name]?.menuPdf, ...(detail as BrandDetail).menuPdf } },
     ]),
   ) as Record<BrandKey, BrandDetail>;
-  const storedEvents = Array.isArray(stored.events) ? stored.events : [];
-  const events = stored.version === 2 ? storedEvents : [...initialContent.events, ...storedEvents.filter((event) => !initialContent.events.some((seed) => seed.id === event.id))];
+  const storedEvents = currentVersion && Array.isArray(stored.events) ? stored.events : [];
+  const events = currentVersion ? storedEvents : initialContent.events;
   return {
     ...initialContent,
     ...stored,
     version: 2,
     brands,
-    outlets: Array.isArray(stored.outlets) ? stored.outlets : initialContent.outlets,
-    offers: Array.isArray(stored.offers) ? stored.offers : initialContent.offers,
+    outlets: currentVersion && Array.isArray(stored.outlets) ? stored.outlets : initialContent.outlets,
+    offers: currentVersion && Array.isArray(stored.offers) ? stored.offers : initialContent.offers,
     events,
     about: { ...initialContent.about, ...(stored.about ?? {}), profiles: Array.isArray(stored.about?.profiles) ? stored.about.profiles : initialContent.about.profiles },
-    journal: Array.isArray(stored.journal) ? stored.journal : initialContent.journal,
-    awards: Array.isArray(stored.awards) ? stored.awards : initialContent.awards,
+    journal: currentVersion && Array.isArray(stored.journal) ? stored.journal : initialContent.journal,
+    awards: currentVersion && Array.isArray(stored.awards) ? stored.awards : initialContent.awards,
     site: { ...initialContent.site, ...(stored.site ?? {}), logo: { ...initialContent.site.logo, ...(stored.site?.logo ?? {}) }, app: { ...initialContent.site.app, ...(stored.site?.app ?? {}) } },
   };
 }

@@ -1,0 +1,1 @@
+- [Brand-location mapping](brand-location-mapping.md) — one mall can host multiple Social Group brands, so locations must be modeled per brand/outlet pair.

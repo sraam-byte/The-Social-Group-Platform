@@ -64,7 +64,7 @@ function BrandsEditor() {
   };
   const add = () => {
     const name = `New brand ${brandNames.length + 1}`;
-    setContent({ ...content, brands: { ...content.brands, [name]: { eyebrow: 'A new good place.', title: 'Make it yours.', text: 'Tell the story of this brand here.', colour: '#d7a62c', image: '/images/hero-table.jpg', fact: 'Add a memorable detail', menuPdf: { name: '', url: '' } } } });
+    setContent({ ...content, brands: { ...content.brands, [name]: { eyebrow: 'A new good place.', title: 'Make it yours.', text: 'Tell the story of this brand here.', colour: '#d7a62c', image: '/images/hero-table.jpg', fact: 'Add a memorable detail', officialUrl: '', instagramUrl: '', menuLinks: [], menuPdf: { name: '', url: '' } } } });
     setSelectedBrand(name);
   };
   const remove = () => {
